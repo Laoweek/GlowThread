@@ -53,44 +53,44 @@ colors:
   scrim-night: "rgba(0, 0, 0, 0.56)"
 typography:
   title:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "1rem"
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: "normal"
   body:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.65
     letterSpacing: "normal"
   body-strong:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "0.875rem"
     fontWeight: 500
     lineHeight: 1.65
     letterSpacing: "normal"
   meta:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "0.78125rem"
     fontWeight: 400
     lineHeight: 1.45
     letterSpacing: "normal"
     fontFeature: '"tnum"'
   meta-strong:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "0.78125rem"
     fontWeight: 500
     lineHeight: 1.45
     letterSpacing: "normal"
   badge:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "0.75rem"
     fontWeight: 500
     lineHeight: 1
     letterSpacing: "normal"
   kbd:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"'
     fontSize: "0.6875rem"
     fontWeight: 500
     lineHeight: 1
@@ -376,7 +376,7 @@ A strict neutral scale, translucent wherever it sits on the page, with one pink 
 
 ## Typography
 
-**Body Font:** the system sans for Latin text first (-apple-system, Segoe UI, Roboto and Arial), then the CJK system faces of `--glowthread-font-cjk`, then colour emoji. The CJK faces follow `<html lang>`: Japanese (Hiragino Sans, Yu Gothic, Meiryo, Noto Sans CJK JP), Korean (Apple SD Gothic Neo, Malgun Gothic, Noto Sans CJK KR), Traditional Chinese (PingFang TC, Microsoft JhengHei, Noto Sans CJK TC, with HK faces for Hong Kong), and Simplified Chinese otherwise (PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC), so Han characters take the shapes the reader expects. No web fonts.
+**Body Font:** the system sans for Latin text first (-apple-system, Segoe UI, system-ui, Roboto and Arial), then the CJK system faces of `--glowthread-font-cjk`, then colour emoji. The CJK faces follow `<html lang>`: Japanese (Hiragino Sans, Yu Gothic, Meiryo, Noto Sans CJK JP), Korean (Apple SD Gothic Neo, Malgun Gothic, Noto Sans CJK KR), Traditional Chinese (PingFang TC, Microsoft JhengHei, Noto Sans CJK TC, with HK faces for Hong Kong), and Simplified Chinese otherwise (PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC), so Han characters take the shapes the reader expects. No web fonts.
 **Label/Mono Font:** ui-monospace with Noto Sans Mono CJK SC, only in the hub's word-filter editor.
 
 **Character:** the platform sans at small, exact sizes. Hierarchy comes from weight (400, 500, 600) and from Ink against Graphite, never from big size jumps. There is no display tier: the largest heading GlowThread draws is the settings heading in the hub, one step above the title size (the hub's page title is the skin's own).

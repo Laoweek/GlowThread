@@ -59,7 +59,7 @@
   --gt-v-color-overlay-border: var(--glowthread-color-overlay-border, transparent);
   --gt-v-color-scrim: var(--glowthread-color-scrim, rgba(0, 0, 0, 0.32));
   --gt-v-color-scheme: var(--glowthread-color-scheme, light);
-  --gt-v-font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, var(--gt-v-font-cjk), sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji");
+  --gt-v-font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, var(--gt-v-font-cjk), sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji");
   --gt-v-font-family-text: var(--glowthread-font-family-text, var(--gt-v-font-family));
   --gt-v-font-family-mono: var(--glowthread-font-family-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Noto Sans Mono CJK SC", monospace);
   --gt-v-font-cjk: var(--glowthread-font-cjk, var(--gt-lang-font-cjk));
