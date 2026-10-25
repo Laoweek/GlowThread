@@ -1,0 +1,64 @@
+name: Security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly, so that new advisories against unchanged lockfiles and pinned actions are caught.
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  dependencies:
+    name: Dependency vulnerabilities
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Fails on every known vulnerability, whatever its severity: the client's dependencies are
+      # bundled into resources/dist, and the build and test tools run here and on contributors'
+      # machines. To accept one, add it to an osv-scanner.toml next to the lockfile, with a reason
+      # and an ignoreUntil date. A lockfile that is missing fails the scan. composer.json has no
+      # composer.lock to scan (its packages are dev tools only).
+      - uses: google/osv-scanner-action/osv-scanner-action@a345acffa64b0eaede81a3d9aae6141214d9c8fc # v2.6.0
+        with:
+          scan-args: |-
+            scan
+            source
+            --lockfile=client/pnpm-lock.yaml
+            --lockfile=tests/e2e/pnpm-lock.yaml
+            --lockfile=tests/e2e/old-chromium/pnpm-lock.yaml
+
+  workflows:
+    name: Workflow security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Findings become annotations. No SARIF upload, so no code scanning and no extra permission.
+      # Only .github: third-party code fetched into dev/ in a local checkout carries its own
+      # workflows, which GitHub never runs here.
+      - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+        with:
+          advanced-security: false
+          annotations: true
+          inputs: .github
+      # Dependabot does not update docker:// steps. Change the version and the digest together.
+      - uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # 1.7.12
+        with:
+          args: -color

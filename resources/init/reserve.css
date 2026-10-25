@@ -1,0 +1,40 @@
+/*!
+ * GlowThread: the comment section's space, reserved before the first paint
+ * (ext.glowThread.reserve, added with a body class by PageDisplayHooks).
+ *
+ * The loader creates the section (#glowthread) after #bodyContent (inside it on Minerva),
+ * whichever grid the skin or site CSS uses. An empty block at the end of #bodyContent holds
+ * the same vertical space until then, and the loader removes it (ext-glowthread-reserve) in
+ * the frame it inserts the section, so the footer does not move. The height is a median of
+ * measured first-page sections for logged-out readers (the floor counter estimates the
+ * comments): size-N means at least N floors. Sizes 0, 21 and off were measured on English
+ * content (desktop in Vector 2022, phones in Minerva), the others on earlier data. Readers
+ * without JavaScript get no reservation.
+ */
+.client-js .ext-glowthread-reserve #bodyContent::after {
+	content: '';
+	display: block;
+	height: var( --gt-reserve, 312px );
+}
+
+.ext-glowthread-size-0 { --gt-reserve: 326px; }
+.ext-glowthread-size-1 { --gt-reserve: 312px; }
+.ext-glowthread-size-2 { --gt-reserve: 380px; }
+.ext-glowthread-size-3 { --gt-reserve: 510px; }
+.ext-glowthread-size-5 { --gt-reserve: 840px; }
+.ext-glowthread-size-8 { --gt-reserve: 1420px; }
+.ext-glowthread-size-13 { --gt-reserve: 1880px; }
+.ext-glowthread-size-21 { --gt-reserve: 2820px; }
+/* A closed page: the heading and a one-line note (135 to 137px in every skin). */
+.ext-glowthread-size-off { --gt-reserve: 136px; }
+
+@media ( max-width: 639px ) {
+	.ext-glowthread-size-0 { --gt-reserve: 350px; }
+	.ext-glowthread-size-1 { --gt-reserve: 312px; }
+	.ext-glowthread-size-2 { --gt-reserve: 377px; }
+	.ext-glowthread-size-3 { --gt-reserve: 590px; }
+	.ext-glowthread-size-5 { --gt-reserve: 805px; }
+	.ext-glowthread-size-8 { --gt-reserve: 1360px; }
+	.ext-glowthread-size-13 { --gt-reserve: 1830px; }
+	.ext-glowthread-size-21 { --gt-reserve: 2120px; }
+}

@@ -1,0 +1,1225 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-10T00:00:00+00:00",
+  "title": "Design System: GlowThread",
+  "extensions": {
+    "colorMeta": {
+      "fg": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#171717",
+        "oklch": "oklch(20.5% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-fg",
+        "mode": "light"
+      },
+      "fg-muted": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#666666",
+        "oklch": "oklch(51.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-fg-muted",
+        "mode": "light"
+      },
+      "fg-subtle": {
+        "role": "neutral",
+        "displayName": "Pewter",
+        "canonical": "#737373",
+        "oklch": "oklch(55.6% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-fg-subtle",
+        "mode": "light"
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Page Through",
+        "canonical": "transparent",
+        "note": "Transparent by design: the skin page shows through. No ramp.",
+        "token": "--glowthread-color-bg",
+        "mode": "light"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-surface",
+        "mode": "light"
+      },
+      "surface-subtle": {
+        "role": "neutral",
+        "displayName": "Smoke Wash",
+        "canonical": "rgba(0, 0, 0, 0.04)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #000000.",
+        "token": "--glowthread-color-surface-subtle",
+        "mode": "light"
+      },
+      "surface-strong": {
+        "role": "neutral",
+        "displayName": "Smoke Press",
+        "canonical": "rgba(0, 0, 0, 0.08)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #000000.",
+        "token": "--glowthread-color-surface-strong",
+        "mode": "light"
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e8e8e8",
+        "oklch": "oklch(93.1% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-border",
+        "mode": "light"
+      },
+      "border-control": {
+        "role": "neutral",
+        "displayName": "Control Edge",
+        "canonical": "#8a8a8a",
+        "oklch": "oklch(63.3% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-border-control",
+        "mode": "light"
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Accent Pink",
+        "canonical": "#dc6e7e",
+        "oklch": "oklch(67.0% 0.138 12.4)",
+        "tonalRamp": [
+          "#1e0005",
+          "#4b0117",
+          "#7a102d",
+          "#a0384b",
+          "#c65b6b",
+          "#ee7e8d",
+          "#feb1b9",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-color-accent",
+        "mode": "light"
+      },
+      "accent-text": {
+        "role": "primary",
+        "displayName": "Deep Rose",
+        "canonical": "#b83f55",
+        "oklch": "oklch(54.4% 0.156 13.2)",
+        "tonalRamp": [
+          "#1e0005",
+          "#4b0016",
+          "#7d062b",
+          "#a72e47",
+          "#ce5367",
+          "#f67789",
+          "#feb1b8",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-color-accent-text",
+        "mode": "light"
+      },
+      "accent-bg": {
+        "role": "primary",
+        "displayName": "Rose Fill",
+        "canonical": "#b83f55",
+        "oklch": "oklch(54.4% 0.156 13.2)",
+        "tonalRamp": [
+          "#1e0005",
+          "#4b0016",
+          "#7d062b",
+          "#a72e47",
+          "#ce5367",
+          "#f67789",
+          "#feb1b8",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-color-accent-bg",
+        "mode": "light"
+      },
+      "accent-bg-hover": {
+        "role": "primary",
+        "displayName": "Rose Fill, hover",
+        "canonical": "#a5384c",
+        "oklch": "oklch(50.2% 0.143 13.0)",
+        "tonalRamp": [
+          "#1e0005",
+          "#4b0216",
+          "#7c0a2b",
+          "#a23549",
+          "#c95869",
+          "#f07c8b",
+          "#feb1b8",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-color-accent-bg-hover",
+        "mode": "light"
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "On Rose",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-color-on-accent",
+        "mode": "light"
+      },
+      "accent-subtle": {
+        "role": "primary",
+        "displayName": "Blush",
+        "canonical": "#fbe5e9",
+        "oklch": "oklch(94.1% 0.025 5.1)",
+        "tonalRamp": [
+          "#14070a",
+          "#302023",
+          "#4e3d40",
+          "#6e5c5f",
+          "#907d80",
+          "#b39fa3",
+          "#d8c3c7",
+          "#fee8ec"
+        ],
+        "token": "--glowthread-color-accent-subtle",
+        "mode": "light"
+      },
+      "highlight": {
+        "role": "primary",
+        "displayName": "Faint Blush",
+        "canonical": "#fdf0f2",
+        "oklch": "oklch(96.6% 0.014 6.7)",
+        "tonalRamp": [
+          "#10090a",
+          "#2b2224",
+          "#493f41",
+          "#695e60",
+          "#8a7f81",
+          "#aea2a3",
+          "#d2c5c7",
+          "#f8ebed"
+        ],
+        "token": "--glowthread-color-highlight",
+        "mode": "light"
+      },
+      "danger": {
+        "role": "status",
+        "displayName": "Signal Red",
+        "canonical": "#c42b2b",
+        "oklch": "oklch(53.8% 0.189 26.4)",
+        "tonalRamp": [
+          "#1e0001",
+          "#4d0104",
+          "#80010c",
+          "#b4161d",
+          "#dd4540",
+          "#ff7369",
+          "#feb3ab",
+          "#ffe9e6"
+        ],
+        "token": "--glowthread-color-danger",
+        "mode": "light"
+      },
+      "danger-subtle": {
+        "role": "status",
+        "displayName": "Red Tint",
+        "canonical": "#fdecec",
+        "oklch": "oklch(95.7% 0.018 17.5)",
+        "tonalRamp": [
+          "#120808",
+          "#2e2222",
+          "#4b3e3e",
+          "#6b5d5d",
+          "#8d7e7e",
+          "#b0a1a1",
+          "#d5c5c5",
+          "#fbeaea"
+        ],
+        "token": "--glowthread-color-danger-subtle",
+        "mode": "light"
+      },
+      "warning": {
+        "role": "status",
+        "displayName": "Amber Brown",
+        "canonical": "#8a5300",
+        "oklch": "oklch(49.4% 0.109 66.9)",
+        "tonalRamp": [
+          "#140800",
+          "#371e01",
+          "#5f3801",
+          "#895308",
+          "#ae7431",
+          "#d39756",
+          "#f9bb7a",
+          "#ffebd7"
+        ],
+        "token": "--glowthread-color-warning",
+        "mode": "light"
+      },
+      "warning-subtle": {
+        "role": "status",
+        "displayName": "Amber Tint",
+        "canonical": "#fdf3dc",
+        "oklch": "oklch(96.6% 0.032 87.3)",
+        "tonalRamp": [
+          "#110a00",
+          "#2c2412",
+          "#49412e",
+          "#69604d",
+          "#8b826d",
+          "#aea48f",
+          "#d2c8b2",
+          "#f8eed7"
+        ],
+        "token": "--glowthread-color-warning-subtle",
+        "mode": "light"
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Leaf Green",
+        "canonical": "#1d7a3e",
+        "oklch": "oklch(51.2% 0.126 150.5)",
+        "tonalRamp": [
+          "#001003",
+          "#012e11",
+          "#025023",
+          "#147439",
+          "#409759",
+          "#65bb7b",
+          "#89e09e",
+          "#c7ffd2"
+        ],
+        "token": "--glowthread-color-success",
+        "mode": "light"
+      },
+      "success-subtle": {
+        "role": "status",
+        "displayName": "Leaf Tint",
+        "canonical": "#e6f4ea",
+        "oklch": "oklch(95.4% 0.020 154.9)",
+        "tonalRamp": [
+          "#050e08",
+          "#1e2821",
+          "#3a453d",
+          "#59655c",
+          "#79867d",
+          "#9ca9a0",
+          "#c0cdc4",
+          "#e5f3e9"
+        ],
+        "token": "--glowthread-color-success-subtle",
+        "mode": "light"
+      },
+      "overlay-border": {
+        "role": "neutral",
+        "displayName": "Overlay Edge",
+        "canonical": "transparent",
+        "note": "Transparent by design: the skin page shows through. No ramp.",
+        "token": "--glowthread-color-overlay-border",
+        "mode": "light"
+      },
+      "scrim": {
+        "role": "neutral",
+        "displayName": "Scrim",
+        "canonical": "rgba(0, 0, 0, 0.32)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #000000.",
+        "token": "--glowthread-color-scrim",
+        "mode": "light"
+      },
+      "fg-night": {
+        "role": "neutral",
+        "displayName": "Ink (night)",
+        "canonical": "#ededed",
+        "oklch": "oklch(94.6% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-night-color-fg",
+        "mode": "night"
+      },
+      "fg-muted-night": {
+        "role": "neutral",
+        "displayName": "Graphite (night)",
+        "canonical": "#a1a1a1",
+        "oklch": "oklch(70.9% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-night-color-fg-muted",
+        "mode": "night"
+      },
+      "fg-subtle-night": {
+        "role": "neutral",
+        "displayName": "Pewter (night)",
+        "canonical": "#8f8f8f",
+        "oklch": "oklch(65.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-night-color-fg-subtle",
+        "mode": "night"
+      },
+      "surface-night": {
+        "role": "neutral",
+        "displayName": "Night Slate (night)",
+        "canonical": "#1c1e22",
+        "oklch": "oklch(23.5% 0.008 264.4)",
+        "tonalRamp": [
+          "#090b0f",
+          "#232529",
+          "#404247",
+          "#5f6166",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9cf",
+          "#eceef4"
+        ],
+        "token": "--glowthread-night-color-surface",
+        "mode": "night"
+      },
+      "surface-subtle-night": {
+        "role": "neutral",
+        "displayName": "Smoke Wash (night)",
+        "canonical": "rgba(255, 255, 255, 0.06)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #ffffff.",
+        "token": "--glowthread-night-color-surface-subtle",
+        "mode": "night"
+      },
+      "surface-strong-night": {
+        "role": "neutral",
+        "displayName": "Smoke Press (night)",
+        "canonical": "rgba(255, 255, 255, 0.1)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #ffffff.",
+        "token": "--glowthread-night-color-surface-strong",
+        "mode": "night"
+      },
+      "border-night": {
+        "role": "neutral",
+        "displayName": "Hairline (night)",
+        "canonical": "rgba(255, 255, 255, 0.1)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #ffffff.",
+        "token": "--glowthread-night-color-border",
+        "mode": "night"
+      },
+      "border-control-night": {
+        "role": "neutral",
+        "displayName": "Control Edge (night)",
+        "canonical": "rgba(255, 255, 255, 0.38)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #ffffff.",
+        "token": "--glowthread-night-color-border-control",
+        "mode": "night"
+      },
+      "accent-night": {
+        "role": "primary",
+        "displayName": "Accent Pink (night)",
+        "canonical": "#e88a98",
+        "oklch": "oklch(73.6% 0.115 10.7)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4b0018",
+          "#722033",
+          "#974151",
+          "#bc6371",
+          "#e38593",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-night-color-accent",
+        "mode": "night"
+      },
+      "accent-text-night": {
+        "role": "primary",
+        "displayName": "Deep Rose (night)",
+        "canonical": "#e88a98",
+        "oklch": "oklch(73.6% 0.115 10.7)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4b0018",
+          "#722033",
+          "#974151",
+          "#bc6371",
+          "#e38593",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-night-color-accent-text",
+        "mode": "night"
+      },
+      "accent-bg-night": {
+        "role": "primary",
+        "displayName": "Rose Fill (night)",
+        "canonical": "#e07a8a",
+        "oklch": "oklch(69.7% 0.127 10.9)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4a0218",
+          "#761931",
+          "#9b3d4f",
+          "#c15f6f",
+          "#e88291",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-night-color-accent-bg",
+        "mode": "night"
+      },
+      "accent-bg-hover-night": {
+        "role": "primary",
+        "displayName": "Rose Fill, hover (night)",
+        "canonical": "#e88a98",
+        "oklch": "oklch(73.6% 0.115 10.7)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4b0018",
+          "#722033",
+          "#974151",
+          "#bc6371",
+          "#e38593",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "token": "--glowthread-night-color-accent-bg-hover",
+        "mode": "night"
+      },
+      "on-accent-night": {
+        "role": "primary",
+        "displayName": "On Rose (night)",
+        "canonical": "#171717",
+        "oklch": "oklch(20.5% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "token": "--glowthread-night-color-on-accent",
+        "mode": "night"
+      },
+      "accent-subtle-night": {
+        "role": "primary",
+        "displayName": "Blush (night)",
+        "canonical": "rgba(232, 138, 152, 0.22)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4b0018",
+          "#722033",
+          "#974151",
+          "#bc6371",
+          "#e38593",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #e88a98.",
+        "token": "--glowthread-night-color-accent-subtle",
+        "mode": "night"
+      },
+      "highlight-night": {
+        "role": "primary",
+        "displayName": "Faint Blush (night)",
+        "canonical": "rgba(232, 138, 152, 0.12)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4b0018",
+          "#722033",
+          "#974151",
+          "#bc6371",
+          "#e38593",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #e88a98.",
+        "token": "--glowthread-night-color-highlight",
+        "mode": "night"
+      },
+      "danger-night": {
+        "role": "status",
+        "displayName": "Signal Red (night)",
+        "canonical": "#ff8a80",
+        "oklch": "oklch(75.9% 0.144 26.1)",
+        "tonalRamp": [
+          "#1e0001",
+          "#4c0105",
+          "#7d0e13",
+          "#a33733",
+          "#ca5b53",
+          "#f27e75",
+          "#feb3ab",
+          "#ffe9e6"
+        ],
+        "token": "--glowthread-night-color-danger",
+        "mode": "night"
+      },
+      "danger-subtle-night": {
+        "role": "status",
+        "displayName": "Red Tint (night)",
+        "canonical": "rgba(255, 138, 128, 0.12)",
+        "tonalRamp": [
+          "#1e0001",
+          "#4c0105",
+          "#7d0e13",
+          "#a33733",
+          "#ca5b53",
+          "#f27e75",
+          "#feb3ab",
+          "#ffe9e6"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #ff8a80.",
+        "token": "--glowthread-night-color-danger-subtle",
+        "mode": "night"
+      },
+      "warning-night": {
+        "role": "status",
+        "displayName": "Amber Brown (night)",
+        "canonical": "#f0b860",
+        "oklch": "oklch(81.7% 0.124 76.8)",
+        "tonalRamp": [
+          "#120900",
+          "#342101",
+          "#593b02",
+          "#825801",
+          "#ab770e",
+          "#d09a40",
+          "#f6be66",
+          "#ffecd0"
+        ],
+        "token": "--glowthread-night-color-warning",
+        "mode": "night"
+      },
+      "warning-subtle-night": {
+        "role": "status",
+        "displayName": "Amber Tint (night)",
+        "canonical": "rgba(240, 184, 96, 0.12)",
+        "tonalRamp": [
+          "#120900",
+          "#342101",
+          "#593b02",
+          "#825801",
+          "#ab770e",
+          "#d09a40",
+          "#f6be66",
+          "#ffecd0"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #f0b860.",
+        "token": "--glowthread-night-color-warning-subtle",
+        "mode": "night"
+      },
+      "success-night": {
+        "role": "status",
+        "displayName": "Leaf Green (night)",
+        "canonical": "#6fd58f",
+        "oklch": "oklch(79.3% 0.139 152.2)",
+        "tonalRamp": [
+          "#001004",
+          "#002e13",
+          "#055027",
+          "#07753b",
+          "#2e9957",
+          "#57be79",
+          "#7de39c",
+          "#c7ffd5"
+        ],
+        "token": "--glowthread-night-color-success",
+        "mode": "night"
+      },
+      "success-subtle-night": {
+        "role": "status",
+        "displayName": "Leaf Tint (night)",
+        "canonical": "rgba(111, 213, 143, 0.12)",
+        "tonalRamp": [
+          "#001004",
+          "#002e13",
+          "#055027",
+          "#07753b",
+          "#2e9957",
+          "#57be79",
+          "#7de39c",
+          "#c7ffd5"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #6fd58f.",
+        "token": "--glowthread-night-color-success-subtle",
+        "mode": "night"
+      },
+      "overlay-border-night": {
+        "role": "neutral",
+        "displayName": "Overlay Edge (night)",
+        "canonical": "rgba(255, 255, 255, 0.12)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #ffffff.",
+        "token": "--glowthread-night-color-overlay-border",
+        "mode": "night"
+      },
+      "scrim-night": {
+        "role": "neutral",
+        "displayName": "Scrim (night)",
+        "canonical": "rgba(0, 0, 0, 0.56)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "note": "Translucent by design: composited over the skin page. The ramp shows the base colour #000000.",
+        "token": "--glowthread-night-color-scrim",
+        "mode": "night"
+      },
+      "accent-badge": {
+        "role": "primary",
+        "displayName": "Badge Blush",
+        "canonical": "#fbe5e9",
+        "oklch": "oklch(94.1% 0.025 5.1)",
+        "tonalRamp": [
+          "#14070a",
+          "#302023",
+          "#4e3d40",
+          "#6e5c5f",
+          "#907d80",
+          "#b39fa3",
+          "#d8c3c7",
+          "#fee8ec"
+        ],
+        "token": "--glowthread-color-accent-badge",
+        "mode": "light"
+      },
+      "accent-badge-night": {
+        "role": "primary",
+        "displayName": "Badge Blush (night)",
+        "canonical": "rgba(232, 138, 152, 0.16)",
+        "tonalRamp": [
+          "#1e0006",
+          "#4b0018",
+          "#722033",
+          "#974151",
+          "#bc6371",
+          "#e38593",
+          "#feb1bb",
+          "#ffe8ea"
+        ],
+        "note": "Translucent by design, 16% instead of Blush's 24% so the Pinned badge keeps 4.5:1 on dark sheets. The ramp shows the base colour #e88a98.",
+        "token": "--glowthread-night-color-accent-badge",
+        "mode": "night"
+      }
+    },
+    "typographyMeta": {
+      "title": {
+        "displayName": "Title",
+        "purpose": "The Comments section heading, sheet titles, settings section headings, record names.",
+        "token": "--glowthread-font-size-title",
+        "phoneFontSize": "1.0625rem"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Comment text (at most 46em, folds after 6 lines), fields, menu items, notices, toasts.",
+        "token": "--glowthread-font-size-body",
+        "phoneFontSize": "0.9375rem"
+      },
+      "body-strong": {
+        "displayName": "Body Strong",
+        "purpose": "Author names, the selected tab, medium button labels.",
+        "phoneFontSize": "0.9375rem"
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Times, floor numbers, counts, help lines, report reasons. Tabular figures for numbers.",
+        "token": "--glowthread-font-size-meta",
+        "phoneFontSize": "0.8125rem"
+      },
+      "meta-strong": {
+        "displayName": "Meta Strong",
+        "purpose": "Small button labels and inline text actions (Show N more replies, Hide replies, Show more).",
+        "phoneFontSize": "0.8125rem"
+      },
+      "badge": {
+        "displayName": "Badge",
+        "purpose": "Status badges and small avatar monograms. A mark, not a text size. 0.75rem by default.",
+        "token": "--glowthread-font-size-small"
+      },
+      "kbd": {
+        "displayName": "Key hint",
+        "purpose": "Uppercase keyboard hints beside hub actions, hidden on touch screens. Hard-coded 0.6875rem."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "The hub word-filter editor and its line numbers only.",
+        "token": "--glowthread-font-size-code"
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay",
+        "value": "0 4px 12px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.12)",
+        "token": "--glowthread-shadow-overlay",
+        "purpose": "Light mode elevation of every floating layer: menus, popovers, sheets, the erase dialog, toasts, tooltips, the @mention list, the sticky bulk bar."
+      },
+      {
+        "name": "overlay-night",
+        "value": "0 0 #0000",
+        "token": "--glowthread-night-shadow-overlay",
+        "purpose": "Night mode: no shadow. The 1px overlay border (white at 12%) carries elevation instead. Never both."
+      },
+      {
+        "name": "permalink-bleed",
+        "value": "0 0 0 6px var(--gt-v-color-highlight)",
+        "purpose": "Not elevation: extends the Faint Blush highlight 6px past a linked comment without scrollable overflow, fading over 2.4s."
+      },
+      {
+        "name": "option-ring",
+        "value": "inset 0 0 0 var(--gt-v-focus-ring-width) var(--gt-v-color-focus-ring)",
+        "purpose": "The @mention option reached by arrow keys, drawn inside the row. 2px in the accent by default (tokens focus-ring-width and color-focus-ring)."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: var(--gt-v-focus-ring-width) solid var(--gt-v-color-focus-ring); outline-offset: var(--gt-v-focus-ring-offset)",
+        "purpose": "An outline, listed here for completeness: the one focus ring for every control. 2px in the accent, 2px outside by default (tokens focus-ring-width, color-focus-ring, focus-ring-offset). Inside (offset minus its width) for menu items, queue items and list options."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "token": "--glowthread-duration-fast",
+        "purpose": "Menus, popovers and tooltips opening, the like pop, colour transitions."
+      },
+      {
+        "name": "duration-base",
+        "value": "200ms",
+        "token": "--glowthread-duration-base",
+        "purpose": "Sheets sliding in, the scrim fading in, a new comment or toast entering."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "token": "--glowthread-ease-out",
+        "purpose": "Exponential ease-out for every entrance and state transition."
+      },
+      {
+        "name": "exit-pop",
+        "value": "100ms ease-in",
+        "purpose": "Menus, popovers and tooltips closing (fade only), in two thirds of duration-exit."
+      },
+      {
+        "name": "exit-fade",
+        "value": "150ms ease-in",
+        "purpose": "Scrim fading out and sheets sliding out. Easing token --glowthread-ease-in.",
+        "token": "--glowthread-duration-exit"
+      },
+      {
+        "name": "pop-in",
+        "value": "opacity 0 to 1, translateY(-2px) scale(0.98) to none",
+        "purpose": "Floating content opening."
+      },
+      {
+        "name": "enter",
+        "value": "opacity 0 to 1, translateY(-6px) to none",
+        "purpose": "A new comment sliding into place, a toast arriving."
+      },
+      {
+        "name": "like",
+        "value": "scale 0.8, 1.12 at 60%, 1",
+        "purpose": "The heart landing on a like."
+      },
+      {
+        "name": "highlight",
+        "value": "2.4s ease-out, tint held to 60%",
+        "purpose": "A permalinked comment. Static tint under reduced motion."
+      },
+      {
+        "name": "pulse",
+        "value": "1.6s ease-in-out infinite, opacity 1 to 0.55",
+        "purpose": "Skeleton blocks while loading."
+      },
+      {
+        "name": "spin",
+        "value": "0.8s linear infinite",
+        "purpose": "The 16px spinner inside a busy button."
+      },
+      {
+        "name": "tip-delay",
+        "value": "300ms",
+        "purpose": "Hover delay before the CSS-only exact-time hint. Keyboard focus shows it at once."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation and transition durations 1ms, one iteration",
+        "purpose": "prefers-reduced-motion: reduce turns every animation off."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "max-width: 639px",
+        "purpose": "Phones: one text step larger, folded replies, bottom sheets, 44px menu items."
+      },
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "The only CSS breakpoint (gt:sm:). Side sheets, 36px avatars, 32px menu items."
+      },
+      {
+        "name": "hub-medium",
+        "value": "720px (app width, ResizeObserver)",
+        "purpose": "Hub: nav row above, queue and a 280px record side by side."
+      },
+      {
+        "name": "hub-wide",
+        "value": "1080px (app width, ResizeObserver)",
+        "purpose": "Hub: 136px rail, queue, 300px record."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one main action of a view (Send, Send report, Log in). Rose fill, white label, darker on hover.",
+      "html": "<button type=\"button\" class=\"ds-btn-primary\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z\"/><path d=\"m21.854 2.147-10.94 10.939\"/></svg>Send</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 0; border-radius: var(--glowthread-radius-control, 6px); background: var(--glowthread-color-accent-bg, #b83f55); color: var(--glowthread-color-on-accent, #ffffff); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); font-size: var(--glowthread-font-size-body, 0.875rem); font-weight: 500; cursor: pointer; transition: background-color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-btn-primary:hover { background: var(--glowthread-color-accent-bg-hover, #a5384c); } .ds-btn-primary:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; pointer-events: none; }"
+    },
+    {
+      "name": "Secondary Button with key hint",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The default button. Here at the small size the hub uses for Approve, with its keyboard hint.",
+      "html": "<button type=\"button\" class=\"ds-btn-secondary\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg>Approve<kbd class=\"ds-kbd\">a</kbd></button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--glowthread-color-border-control, #8a8a8a); border-radius: var(--glowthread-radius-control, 6px); background: var(--glowthread-color-surface, #ffffff); color: var(--glowthread-color-fg, #171717); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); font-size: var(--glowthread-font-size-meta, 0.78125rem); font-weight: 500; cursor: pointer; transition: background-color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-btn-secondary:hover { background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; } .ds-kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 1.25em; height: 1.25em; padding: 0 0.25em; border: 1px solid var(--glowthread-color-border, #e8e8e8); border-radius: 4px; color: var(--glowthread-color-fg-muted, #666666); font: inherit; font-size: 0.6875rem; font-weight: 500; line-height: 1; text-transform: uppercase; }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Destructive actions (Delete, Hide, Erase): outlined with red text, a red tint on hover. Never filled.",
+      "html": "<button type=\"button\" class=\"ds-btn-danger\">Delete</button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--glowthread-color-border-control, #8a8a8a); border-radius: var(--glowthread-radius-control, 6px); background: var(--glowthread-color-surface, #ffffff); color: var(--glowthread-color-danger, #c42b2b); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); font-size: var(--glowthread-font-size-body, 0.875rem); font-weight: 500; cursor: pointer; transition: background-color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-btn-danger:hover { background: var(--glowthread-color-danger-subtle, #fdecec); } .ds-btn-danger:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; }"
+    },
+    {
+      "name": "Like Button",
+      "kind": "custom",
+      "refersTo": "like-button",
+      "description": "Outline heart and tabular count in Graphite. Liked: pink filled heart, Deep Rose count, a 150ms pop.",
+      "html": "<div class=\"ds-like-row\"><button type=\"button\" class=\"ds-like\" aria-pressed=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/></svg><span>3</span></button><button type=\"button\" class=\"ds-like ds-like-on\" aria-pressed=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/></svg><span>12</span></button></div>",
+      "css": ".ds-like-row { display: flex; gap: 16px; font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); } .ds-like { display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 6px; border: 0; border-radius: var(--glowthread-radius-control, 6px); background: transparent; color: var(--glowthread-color-fg-muted, #666666); font-size: var(--glowthread-font-size-meta, 0.78125rem); font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-like:hover { background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); color: var(--glowthread-color-fg, #171717); } .ds-like:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; } .ds-like-on, .ds-like-on:hover { color: var(--glowthread-color-accent-text, #b83f55); } .ds-like-on svg { fill: var(--glowthread-color-accent, #dc6e7e); color: var(--glowthread-color-accent, #dc6e7e); } .ds-like:active svg { transform: scale(1.12); transition: transform var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }"
+    },
+    {
+      "name": "Composer",
+      "kind": "input",
+      "refersTo": "composer",
+      "description": "The one-line comment field in an 8px frame. Focus turns the frame border pink. It grows to three lines with a toolbar once focused.",
+      "html": "<div class=\"ds-composer\"><label class=\"ds-sr\" for=\"ds-composer-text\">Say something…</label><textarea id=\"ds-composer-text\" rows=\"1\" placeholder=\"Say something…\"></textarea></div>",
+      "css": ".ds-composer { border: 1px solid var(--glowthread-color-border-control, #8a8a8a); border-radius: var(--glowthread-radius-surface, 8px); background: var(--glowthread-color-surface, #ffffff); transition: border-color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-composer:focus-within { border-color: var(--glowthread-color-accent, #dc6e7e); } .ds-composer textarea { display: block; width: 100%; padding: 8px 12px; border: 0; outline: none; resize: none; background: transparent; color: var(--glowthread-color-fg, #171717); caret-color: var(--glowthread-color-accent-text, #b83f55); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); font-size: var(--glowthread-font-size-body, 0.875rem); line-height: var(--glowthread-line-height-body, 1.65); } .ds-composer textarea::placeholder { color: var(--glowthread-color-fg-subtle, #737373); opacity: 1; } .ds-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }"
+    },
+    {
+      "name": "Filter Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Hub text field: 32px, 6px radius, Control Edge, a Graphite leading icon. Pink border and the global ring on focus.",
+      "html": "<label class=\"ds-field\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m21 21-4.34-4.34\"/><circle cx=\"11\" cy=\"11\" r=\"8\"/></svg><input type=\"search\" placeholder=\"Search comment text\" aria-label=\"Search comment text\"></label>",
+      "css": ".ds-field { position: relative; display: block; max-width: 320px; } .ds-field svg { position: absolute; left: 10px; top: 8px; color: var(--glowthread-color-fg-muted, #666666); pointer-events: none; } .ds-field input { box-sizing: border-box; width: 100%; height: 32px; padding: 0 32px; border: 1px solid var(--glowthread-color-border-control, #8a8a8a); border-radius: var(--glowthread-radius-control, 6px); background: var(--glowthread-color-surface, #ffffff); color: var(--glowthread-color-fg, #171717); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); font-size: var(--glowthread-font-size-body, 0.875rem); -webkit-appearance: none; appearance: none; } .ds-field input::placeholder { color: var(--glowthread-color-fg-subtle, #737373); opacity: 1; } .ds-field input:focus { border-color: var(--glowthread-color-accent, #dc6e7e); } .ds-field input:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; }"
+    },
+    {
+      "name": "Sort Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Top · Newest: Graphite labels, the selected one in Ink medium over a 2px pink underline with round caps.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Sort\"><button type=\"button\" role=\"tab\" aria-selected=\"true\" class=\"ds-tab\">Top</button><span class=\"ds-tab-sep\" aria-hidden=\"true\">·</span><button type=\"button\" role=\"tab\" aria-selected=\"false\" class=\"ds-tab\">Newest</button></div>",
+      "css": ".ds-tabs { display: inline-flex; align-items: center; gap: 4px; font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); } .ds-tab-sep { color: var(--glowthread-color-fg-subtle, #737373); } .ds-tab { position: relative; display: inline-flex; align-items: center; height: 32px; padding: 0 8px; border: 0; border-radius: var(--glowthread-radius-control, 6px); background: transparent; color: var(--glowthread-color-fg-muted, #666666); font-size: var(--glowthread-font-size-body, 0.875rem); cursor: pointer; transition: color var(--glowthread-duration-fast, 150ms) var(--glowthread-ease-out, cubic-bezier(0.16, 1, 0.3, 1)); } .ds-tab:hover { color: var(--glowthread-color-fg, #171717); } .ds-tab:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; } .ds-tab::before { content: \"\"; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; border-radius: 9999px; background: transparent; } .ds-tab[aria-selected=\"true\"] { color: var(--glowthread-color-fg, #171717); font-weight: 500; } .ds-tab[aria-selected=\"true\"]::before { background: var(--glowthread-color-accent, #dc6e7e); }"
+    },
+    {
+      "name": "Status Badges",
+      "kind": "chip",
+      "refersTo": "badge-neutral",
+      "description": "Quiet status labels: 20px, 4px radius, 12px medium text on the tone's own tint.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-badge-accent\">Pinned</span><span class=\"ds-badge ds-badge-warning\">Awaiting review</span><span class=\"ds-badge ds-badge-danger\">3 reports</span><span class=\"ds-badge\">Hidden</span></div>",
+      "css": ".ds-badges { display: flex; flex-wrap: wrap; gap: 8px; font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); } .ds-badge { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); color: var(--glowthread-color-fg-muted, #666666); font-size: 0.75rem; font-weight: 500; line-height: 1; white-space: nowrap; } .ds-badge-accent { background: var(--glowthread-color-accent-badge, #fbe5e9); color: var(--glowthread-color-accent-text, #b83f55); } .ds-badge-warning { background: var(--glowthread-color-warning-subtle, #fdf3dc); color: var(--glowthread-color-warning, #8a5300); } .ds-badge-danger { background: var(--glowthread-color-danger-subtle, #fdecec); color: var(--glowthread-color-danger, #c42b2b); }"
+    },
+    {
+      "name": "Dropdown Menu",
+      "kind": "custom",
+      "refersTo": "menu",
+      "description": "The ⋯ menu: Paper, 8px radius, Overlay elevation (a border instead in night mode). Wash on the highlighted item, red for danger.",
+      "html": "<div class=\"ds-menu\" role=\"menu\"><button type=\"button\" role=\"menuitem\" class=\"ds-menu-item\">Copy link</button><button type=\"button\" role=\"menuitem\" class=\"ds-menu-item\">Report</button><div class=\"ds-menu-sep\" role=\"separator\"></div><button type=\"button\" role=\"menuitem\" class=\"ds-menu-item ds-menu-danger\">Delete</button></div>",
+      "css": ".ds-menu { display: flex; flex-direction: column; min-width: 144px; width: max-content; padding: 4px; border: 1px solid var(--glowthread-color-overlay-border, transparent); border-radius: var(--glowthread-radius-surface, 8px); background: var(--glowthread-color-surface, #ffffff); box-shadow: var(--glowthread-shadow-overlay, 0 4px 12px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.12)); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); } .ds-menu-item { display: flex; align-items: center; min-height: 32px; padding: 6px 10px; border: 0; border-radius: var(--glowthread-radius-control, 6px); background: transparent; color: var(--glowthread-color-fg, #171717); font: inherit; font-size: var(--glowthread-font-size-body, 0.875rem); text-align: start; cursor: pointer; } .ds-menu-item:hover { background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); } .ds-menu-item:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: -2px; background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); } .ds-menu-danger { color: var(--glowthread-color-danger, #c42b2b); } .ds-menu-danger:hover, .ds-menu-danger:focus-visible { background: var(--glowthread-color-danger-subtle, #fdecec); } .ds-menu-sep { height: 1px; margin: 4px -4px; background: var(--glowthread-color-border, #e8e8e8); }"
+    },
+    {
+      "name": "Comment Row",
+      "kind": "custom",
+      "refersTo": "avatar",
+      "description": "The reader signature: monogram avatar on a name hue, name, pinned badge, tabular floor and time pushed right, an always-visible ⋯, text, then like and Reply.",
+      "html": "<article class=\"ds-comment\"><span class=\"ds-avatar\" style=\"--ds-hue: 140\" aria-hidden=\"true\">A</span><div class=\"ds-comment-main\"><header class=\"ds-comment-head\"><a href=\"#\" class=\"ds-name\">Alice</a><span class=\"ds-badge-pin\">Pinned</span><span class=\"ds-meta\">#22 · 5 days ago</span><button type=\"button\" class=\"ds-more\" aria-label=\"More actions\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"1\"/><circle cx=\"19\" cy=\"12\" r=\"1\"/><circle cx=\"5\" cy=\"12\" r=\"1\"/></svg></button></header><p class=\"ds-text\">Fed mine twice a day and it doubled by Sunday. Thanks for the tip! ヾ(≧▽≦*)o</p><footer class=\"ds-comment-foot\"><button type=\"button\" class=\"ds-act\" aria-pressed=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/></svg><span>3</span></button><button type=\"button\" class=\"ds-act\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z\"/></svg>Reply</button></footer></div></article>",
+      "css": ".ds-comment { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--glowthread-color-border, #e8e8e8); font-family: var(--glowthread-font-family, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"PingFang SC\", \"Microsoft YaHei\", sans-serif); color: var(--glowthread-color-fg, #171717); } .ds-avatar { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 9999px; background: hsl(var(--ds-hue), var(--glowthread-avatar-bg-saturation, 58%), var(--glowthread-avatar-bg-lightness, 89%)); color: hsl(var(--ds-hue), var(--glowthread-avatar-fg-saturation, 52%), var(--glowthread-avatar-fg-lightness, 28%)); font-size: 0.9375rem; font-weight: 500; } .ds-comment-main { flex: 1; min-width: 0; } .ds-comment-head { display: flex; align-items: center; gap: 8px; min-height: 24px; } .ds-name { color: var(--glowthread-color-fg, #171717); font-size: var(--glowthread-font-size-body, 0.875rem); font-weight: 500; text-decoration: none; } .ds-name:hover { text-decoration: underline; text-underline-offset: 0.2em; } .ds-badge-pin { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; background: var(--glowthread-color-accent-badge, #fbe5e9); color: var(--glowthread-color-accent-text, #b83f55); font-size: 0.75rem; font-weight: 500; line-height: 1; } .ds-meta { margin-left: auto; color: var(--glowthread-color-fg-muted, #666666); font-size: var(--glowthread-font-size-meta, 0.78125rem); font-variant-numeric: tabular-nums; white-space: nowrap; } .ds-more { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 0; border-radius: var(--glowthread-radius-control, 6px); background: transparent; color: var(--glowthread-color-fg-muted, #666666); cursor: pointer; } .ds-more:hover { background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); color: var(--glowthread-color-fg, #171717); } .ds-text { margin: 0; max-width: 46em; font-size: var(--glowthread-font-size-body, 0.875rem); line-height: var(--glowthread-line-height-body, 1.65); white-space: pre-wrap; } .ds-comment-foot { display: flex; align-items: center; gap: 16px; margin-top: 4px; } .ds-act { display: inline-flex; align-items: center; gap: 4px; height: 28px; margin-left: -6px; padding: 0 6px; border: 0; border-radius: var(--glowthread-radius-control, 6px); background: transparent; color: var(--glowthread-color-fg-muted, #666666); font: inherit; font-size: var(--glowthread-font-size-meta, 0.78125rem); font-variant-numeric: tabular-nums; cursor: pointer; } .ds-act:hover { background: var(--glowthread-color-surface-subtle, rgba(0, 0, 0, 0.04)); color: var(--glowthread-color-fg, #171717); } .ds-act:focus-visible, .ds-more:focus-visible, .ds-name:focus-visible { outline: 2px solid var(--glowthread-color-accent, #dc6e7e); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Familiar Thread, Precisely Kept",
+    "overview": "GlowThread is the comment section readers already know from large video and community sites, played straight: a count with Top · Newest tabs, a one-line composer, pinned and popular comments, then avatar, name, floor and time, text, like and Reply, with two reply levels and \"Show N more replies\" to unfold the rest in place. Its second surface is a moderation inbox for the moderators who clear the queue. Neither surface invents a look. Both win on exact spacing, calm hierarchy, instant feedback and identical behaviour on legacy Vector, Vector 2022, Citizen and Minerva.\n\nThe material is the wiki page itself. The section draws no background and no card, so it sits on Vector's white, Citizen's cool grey or any night background unchanged. Hairline dividers and a 4 px rhythm give it structure, translucent black or white washes give it hover and pressed states, and one pink marks everything a person can act on. Only what floats lifts off the page. Motion only marks a change of state, and reduced motion turns it off.\n\nDensity follows the job. The reader section is comfortable: 1.65 line height, 16 px between comment rows, 44 px touch targets on phones, the ⋯ menu always visible. The hub is dense but calm: 10 px item padding, 28 px action buttons with key hints, a rail, queue and record side by side from 1080 px. Both share every token and component. Left out on purpose: gradients, glass and glow, decorative motion, hover-only controls, a modal where an inline control or a sheet works, infinite scroll, layout shift while loading, web fonts and any outside request.",
+    "keyCharacteristics": [
+      "One accent, pink, in two shades: the base shade for marks, a deep text-safe shade for text and the filled button.",
+      "A transparent section on the skin's own page, structured by 1 px hairlines.",
+      "Translucent neutral washes for hover, pressed, chips and notices, so they read the same on every skin.",
+      "The system sans, then CJK system faces for the reader's language, at three text sizes. Weight and colour carry hierarchy, tabular figures carry numbers.",
+      "Flat at rest. Floating layers lift with a soft shadow in light mode and a 1 px border in night mode, never both.",
+      "Monogram avatars on soft hues derived from the name, with no uploads and no outside requests.",
+      "Every control works by touch (44 px) and keyboard (a 2 px pink ring)."
+    ],
+    "rules": [
+      {
+        "name": "The One Pink Rule",
+        "body": "Pink is the only hue that means \"act here\" or \"this is current\". The base shade draws marks (heart, tab underline, focus ring, focused field border), the deep shade carries text and the filled button. A filled pink button is the one main action of its view: Send, Send report, Log in, Review and save or Save changes in settings, Save rules in the word filter.",
+        "section": "colors"
+      },
+      {
+        "name": "The Status-as-Tint Rule",
+        "body": "Danger, warning and success appear as text on their own tint, or as a small icon mark (flag, clock). They never fill a button, a row or a field. Destructive buttons stay outlined with red text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Translucent Wash Rule",
+        "body": "Hover, pressed, chip and notice surfaces are black or white at 4 to 10 percent, never an opaque grey, so they look the same on Vector's white, Citizen's cool grey and every night background.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Link Rule",
+        "body": "In the moderation hub a link is body-coloured with a Control Edge underline that turns solid on hover. Pink stays for focus, selection, checked controls, the tab underline and saving. In the reader, links and mentions inside comment text stay Deep Rose.",
+        "section": "colors"
+      },
+      {
+        "name": "The 4.5 and 3 Rule",
+        "body": "Text tokens meet 4.5:1 on white and on the night surface, status text meets 4.5:1 on its own tint, control edges and pink marks meet 3:1. A new colour proves both before it ships.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Sizes Rule",
+        "body": "Text is meta, body or title: 12.5, 14 and 16 px on desktop, 13, 15 and 17 px on phones (a ratio near 1.125). The 12 px badge and 11 px key hint are marks, not text sizes.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every number that changes or lines up (counts, floor numbers, times, character counters, tab counts, the exact-time hint) uses tabular figures.",
+        "section": "typography"
+      },
+      {
+        "name": "The Page-Through Rule",
+        "body": "The section never draws its own background, card or outer border. The skin's page shows through and Hairlines do the structuring.",
+        "section": "layout"
+      },
+      {
+        "name": "The No-Shift Rule",
+        "body": "The section's height is reserved before the first paint and the skeleton matches it exactly, so nothing below the article moves when comments load.",
+        "section": "layout"
+      },
+      {
+        "name": "The 44 Rule",
+        "body": "On touch screens every control answers taps in at least 44 by 44 px, centred on it, without growing the layout (`gt-hit`). Menu items and option rows are 44 px tall on phones.",
+        "section": "layout"
+      },
+      {
+        "name": "The Shadow-or-Border Rule",
+        "body": "A floating layer gets the shadow in light mode and the 12% white border in night mode, never both.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Flat-at-Rest Rule",
+        "body": "Nothing that stays in the flow of the page casts a shadow. If it does not float, it does not lift.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Three Radii Rule",
+        "body": "8 px for surfaces, 6 px for controls, 4 px for marks, a full circle for avatars and pills. Nothing rounds larger than 8 px except a circle.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do take every colour, text size, radius and duration from the resolved tokens (`var(--gt-v-*)`, or the `gt:` utilities that read them), never from a `--glowthread-*` property directly, so site CSS can retheme both apps and their overlays.",
+      "Do keep filled pink for the one main action of a view, and the base pink (#dc6e7e) for marks: the liked heart, the tab underline, the focus ring and a focused field's border.",
+      "Do separate rows with 1 px Hairlines and keep them flat. Use a box only where the box itself says something (a gate, a notice, a confirmation).",
+      "Do use the translucent washes (black at 4% and 8%, white at 6% and 10% in night mode) for hover, pressed and chip surfaces.",
+      "Do give every control a 44 px touch target on touch screens (`gt-hit` or a 44 px box) and keep the ⋯ menu visible at all times.",
+      "Do set counts, floor numbers, times and counters in tabular figures.",
+      "Do lift floating layers with the Overlay shadow in light mode and the 12% white border in night mode, and render them into the portal at 450, 470 or 480.",
+      "Do animate only changes of state, within 150 to 200 ms on the exponential ease-out, and let reduced motion switch it off.",
+      "Do mark young accounts in bold, and status with a tinted badge that says it in words.",
+      "Do check a new colour for 4.5:1 as text and 3:1 as a mark, in light mode and under every night switch."
+    ],
+    "donts": [
+      "Don't use gradients, glass, blur or glow.",
+      "Don't add decorative motion, or a control that only appears on hover.",
+      "Don't open a modal where an inline control or a sheet works. Only the irreversible erase asks in a dialog.",
+      "Don't load more comments by infinite scroll. Keep the explicit Load more.",
+      "Don't give the section a background, a card or an outer border. The page shows through.",
+      "Don't use an opaque grey for hover or chips.",
+      "Don't fill a button with red, amber or green. Destructive actions are outlined with red text.",
+      "Don't colour hub links pink.",
+      "Don't tint the focused queue item on touch screens, where a tinted first item looks pressed.",
+      "Don't load web fonts or anything from a CDN or outside service, including avatars.",
+      "Don't ship `:is()`, `:where()`, `:has()`, `oklch()`, `color-mix()`, cascade layers, range media queries or the individual `translate` and `scale` properties, and avoid the Tailwind utilities that produce them (`bg-x/50`, `space-*`, `divide-*`, `group-*`, `peer-*`, `has-*`, `translate-*`).",
+      "Don't add `!important` beyond the two rules that hold against site CSS written with `!important` (the heading font in the apps, paragraph margins in the hub)."
+    ]
+  }
+}

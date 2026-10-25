@@ -1,0 +1,77 @@
+/*
+ * Preflight, layer "base": a small normalisation after the scoped revert, in place of
+ * Tailwind's preflight, whose :where() and :is() selectors Chrome 87 drops. The headings'
+ * face and the links' underline share its rules, so each selector is written once.
+ */
+.gt-scope,
+.gt-scope *,
+.gt-scope ::before,
+.gt-scope ::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid var(--gt-v-color-border);
+}
+
+.gt-scope h1,
+.gt-scope h2,
+.gt-scope h3,
+.gt-scope h4,
+.gt-scope h5,
+.gt-scope h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  /* Site CSS may set heading fonts with !important (for example `h1, h2, h3, h4, h5, h6
+     { font-family: sans-serif !important }` in MediaWiki:Vector.css). Only an !important rule
+     keeps the app's own type on its headings.
+     It sets nothing Reka UI writes inline, so inline styles still win where they matter. */
+  font-family: var(--gt-v-font-family) !important;
+}
+
+.gt-scope ol,
+.gt-scope ul,
+.gt-scope menu {
+  list-style: none;
+}
+
+.gt-scope a {
+  color: inherit;
+  text-decoration: inherit;
+  /* After the text-decoration shorthand, which can reset the thickness. */
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.gt-scope b,
+.gt-scope strong {
+  font-weight: var(--gt-v-font-weight-strong);
+}
+
+.gt-scope svg,
+.gt-scope img {
+  display: block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.gt-scope button,
+.gt-scope input,
+.gt-scope select,
+.gt-scope textarea {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+  opacity: 1;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.gt-scope textarea {
+  resize: none;
+}
+
+.gt-scope [hidden] {
+  display: none !important;
+}

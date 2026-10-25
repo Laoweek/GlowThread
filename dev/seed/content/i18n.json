@@ -1,0 +1,135 @@
+{
+  "Sandbox/i18n": [
+    {
+      "ref": "i18n-zh-hans",
+      "by": "Alice",
+      "ago": "3d",
+      "likes": ["Bob", "Carol"],
+      "text": "这是一条简体中文测试评论。昨天照着这个网站上的方法做了烤番茄汤，味道很好！我多放了几瓣大蒜，香味更浓。下次想试试加一点烟熏辣椒粉。",
+      "replies": [
+        {
+          "ref": "i18n-zh-hant",
+          "by": "Bob",
+          "ago": "2d",
+          "likes": ["Alice"],
+          "text": "這是一則繁體中文的回覆測試。我也照著做了，另外加了一顆紅椒一起烤，湯的顏色更漂亮，也更甜。"
+        }
+      ]
+    },
+    {
+      "ref": "i18n-ja",
+      "by": "Carol",
+      "ago": "3d",
+      "text": "これは日本語のテストコメントです。クレームブリュレを作ってみました。表面のカラメルがパリッとして、とてもおいしかったです。バーナーがない場合は、オーブンのグリルでも大丈夫でしょうか？",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "2d",
+          "likes": ["Carol"],
+          "text": "日本語の返信テストです。グリルでも作れますが、すぐに焦げるので目を離さないでください。焼いたあと、もう一度冷蔵庫で冷やすのがおすすめです。"
+        }
+      ]
+    },
+    {
+      "ref": "i18n-ko",
+      "by": "Dave",
+      "ago": "2d",
+      "likes": ["Erin"],
+      "text": "한국어 테스트 댓글입니다. 바나나 브레드를 만들었는데 정말 촉촉하고 맛있었어요. 다음에는 호두를 넣어 볼 생각이에요.",
+      "replies": [
+        {
+          "by": "Erin",
+          "ago": "1d",
+          "text": "한국어 답글 테스트예요. 초콜릿 칩도 잘 어울려요! 반죽에 넣기 전에 밀가루를 살짝 묻히면 바닥에 가라앉지 않아요."
+        }
+      ]
+    },
+    {
+      "ref": "i18n-ar",
+      "by": "ip:203.0.113.5",
+      "ago": "2d",
+      "likes": ["Moderator", "Trent"],
+      "text": "هذا تعليق تجريبي باللغة العربية. جربت وصفة شوربة العدس الأحمر وكانت لذيذة جداً. استخدمت ٢٠٠ غرام من العدس و٨٠٠ مل من الماء، وأضفت القليل من الكمون والليمون في النهاية.",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "1d",
+          "text": "شكراً على التجربة! هذا رد تجريبي باللغة العربية لاختبار اتجاه النص من اليمين إلى اليسار داخل سلسلة الردود."
+        }
+      ]
+    },
+    {
+      "ref": "i18n-he",
+      "by": "Erin",
+      "ago": "2d",
+      "likes": ["Alice"],
+      "text": "זוהי תגובת בדיקה בעברית. אפיתי את הפוקאצ'ה עם רוזמרין ושום, והיא יצאה רכה מבפנים ופריכה מבחוץ, בדיוק כמו שצריך."
+    },
+    {
+      "ref": "i18n-bidi",
+      "by": "Trent",
+      "ago": "1d",
+      "text": "Mixed direction test: the Hebrew word for bread is לחם and the Arabic word is خبز. Next, an English recipe name inside Arabic: جربت وصفة Buttermilk pancakes مع 400 مل من الحليب (بدلاً من اللبن الرائب) ونجحت. And back to English at the end (with brackets).",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "20h",
+          "text": "@Trent here is Hebrew with a link and numbers in the middle: המתכון נמצא בכתובת https://example.com/recipes/focaccia ונדרשות 25 דקות אפייה (בתנור של 220 מעלות)."
+        }
+      ]
+    },
+    {
+      "ref": "i18n-emoji",
+      "by": "Carol",
+      "ago": "1d",
+      "likes": ["Alice", "Dave", "Erin"],
+      "text": "Emoji test. ZWJ sequences that should each show as one picture: family 👨‍👩‍👧‍👦, cooks 👩🏽‍🍳 🧑🏻‍🍳 👨🏿‍🍳, heart on fire ❤️‍🔥, polar bear 🐻‍❄️, rainbow flag 🏳️‍🌈. Plus a flag made of two regional indicators 🇯🇵 and a keycap 1️⃣.",
+      "replies": [
+        {
+          "by": "Dave",
+          "ago": "18h",
+          "text": "Skin tone modifiers: 👍🏻 👍🏼 👍🏽 👍🏾 👍🏿 and waving 👋🏼👋🏾. Each thumb should show its own skin tone."
+        }
+      ]
+    },
+    {
+      "ref": "i18n-vi-precomposed",
+      "by": "Alice",
+      "ago": "20h",
+      "text": "Bình luận thử nghiệm bằng tiếng Việt: Tôi đã làm bánh mì chuối theo công thức này, bánh mềm và thơm lắm. Lần sau tôi sẽ thêm một chút quế.",
+      "replies": [
+        {
+          "ref": "i18n-hi-combining",
+          "by": "ip:2001:db8::42",
+          "ago": "16h",
+          "text": "यह हिंदी में एक परीक्षण टिप्पणी है। मैंने इस विकी की रेसिपी से लाल मसूर की दाल बनाई, बहुत स्वादिष्ट बनी। तड़के में मैंने थोड़ी हींग भी डाली।"
+        }
+      ]
+    },
+    {
+      "ref": "i18n-long-token",
+      "by": "Bob",
+      "ago": "12h",
+      "text": "Long unbroken string test. The link below is 300 characters with no spaces, so it should wrap inside the comment box instead of stretching the page:\nhttps://example.com/cookbook/sourdough-starter/feeding-log?entries=day01-50g-flour-50g-water-day02-50g-flour-50g-water-day03-50g-flour-50g-water-day04-50g-flour-50g-water-day05-50g-flour-50g-water-day06-50g-flour-50g-water-day07-50g-flour-50g-water-day08-50g-flour-50g-water-day09-50g-flour-50g-water"
+    },
+    {
+      "ref": "i18n-four-byte-limit",
+      "by": "Trent",
+      "ago": "6h",
+      "text": "𝐋𝐞𝐧𝐠𝐭𝐡 𝐥𝐢𝐦𝐢𝐭 𝐭𝐞𝐬𝐭: 𝐞𝐱𝐚𝐜𝐭𝐥𝐲 𝟏𝟎𝟎𝟎 𝐜𝐨𝐝𝐞 𝐩𝐨𝐢𝐧𝐭𝐬, 𝐚𝐥𝐦𝐨𝐬𝐭 𝐚𝐥𝐥 𝐨𝐟 𝐭𝐡𝐞𝐦 𝟒 𝐛𝐲𝐭𝐞𝐬 𝐢𝐧 𝐔𝐓𝐅-𝟖\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮🥛🍯🥕\n🍞🥐🥖🫓🥨🥯🥞🧇🧀🍳🥚🍅🧄🧅🍋🍌🍮"
+    },
+    {
+      "ref": "i18n-cjk-url",
+      "by": "Erin",
+      "ago": "4h",
+      "text": "测试：链接后面直接接中文。https://example.com/recipes/42这几个字不应该算进链接里。@Alice，你那边显示正常吗？",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "3h",
+          "text": "@Erin 链接应该在数字后面结束，后面的中文不属于链接。"
+        }
+      ]
+    }
+  ]
+}

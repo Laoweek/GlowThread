@@ -1,0 +1,113 @@
+{
+  "Herb focaccia": [
+    {
+      "by": "Alice",
+      "likes": ["Bob", "Carol"],
+      "text": "'''Tip:''' press the dimples all the way down to the tin, otherwise they disappear in the oven.",
+      "replies": [
+        {
+          "by": "Bob",
+          "text": "@[[User:Alice|Alice]] Can confirm. My first one looked like a pillow with no dimples at all."
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.31",
+      "text": "Does this work with a [[Sourdough starter|sourdough starter]] instead of yeast?",
+      "replies": [
+        {
+          "by": "Carol",
+          "likes": ["Trent"],
+          "text": "Yes, it's in the tips at the bottom. It just takes ''much'' longer to rise."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "likes": ["Erin"],
+      "text": "Made it twice this week.<br />Once with rosemary, once with thin slices of red onion. Both were gone within the hour."
+    },
+    {
+      "by": "Erin",
+      "text": "Went ''very'' generous with the olive oil this time and it was the best one yet."
+    },
+    {
+      "by": "Trent",
+      "likes": ["Alice", "Carol", "Moderator"],
+      "text": "For anyone converting: 500 g of flour is roughly 4 cups, but please weigh it. '''Cups are not reliable for bread.'''",
+      "replies": [
+        {
+          "by": "ip:203.0.113.90",
+          "text": "thanks, didnt know that"
+        },
+        {
+          "by": "Bob",
+          "text": "Seconded. A cheap kitchen scale changed my baking more than any recipe did.",
+          "replies": [
+            {
+              "by": "Trent",
+              "text": "'''Exactly.''' And it means fewer measuring cups to wash."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Roasted tomato soup": [
+    {
+      "by": "Carol",
+      "likes": ["Alice", "Dave"],
+      "text": "Roasted the tomatoes the day before and kept them in the fridge. The soup came together in ''15 minutes'' the next day."
+    },
+    {
+      "by": "Bob",
+      "likes": ["Erin"],
+      "text": "'''Warning:''' don't blend it hot with the lid clamped down. See the tips on the page.",
+      "replies": [
+        {
+          "by": "Erin",
+          "text": "Learned this one the hard way too."
+        }
+      ]
+    },
+    {
+      "by": "ip:2001:db8::25",
+      "text": "Can I leave out the stock and use water?",
+      "replies": [
+        {
+          "by": "Trent",
+          "likes": ["Carol"],
+          "text": "Yes. Add a little more salt and maybe a spoon of tomato paste.<br />The roasted garlic carries a lot of the flavour anyway."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "likes": ["Bob", "Carol"],
+      "text": "Served it with [[Herb focaccia]] on the side. Perfect lunch."
+    },
+    {
+      "by": "Alice",
+      "text": "Added a pinch of smoked paprika. ''Highly'' recommended.",
+      "replies": [
+        {
+          "by": "Carol",
+          "text": "Ooh, trying this.",
+          "replies": [
+            {
+              "by": "Alice",
+              "text": "Let me know how it goes!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.140",
+      "reports": [
+        { "by": "Erin", "reason": "offtopic" }
+      ],
+      "text": "anyone know a good bakery near the station? need bread for this"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+/*
+ * Example themes for site administrators. Not imported by the apps: copy a block into
+ * MediaWiki:Common.css (or a skin's CSS page, such as MediaWiki:Vector.css). Every block works
+ * with a plain selector there, in any order: GlowThread only reads these properties, each with
+ * its own default, so whatever the site sets wins. Token reference: docs/theming.md.
+ *
+ * Light values are --glowthread-<name>. Night mode reads --glowthread-night-<name>, so a block
+ * that sets only light values leaves night mode as it is.
+ */
+
+/* 1. Brand colour (blue), light and night. Contrast, checked like the defaults:
+      light: #3366cc marks 5.37:1 on white, #2a4b8d text 8.44:1 on white and 7.37:1 on its
+      tint #eaf0fb, white on the #2a4b8d button 8.44:1 (hover 10.23:1).
+      night: #88a3e8 marks and text 6.72:1 on the night surface, 5.08:1 on the Pinned badge
+      and 4.64:1 on its 20% tint, ink #171717 on the #6d8fe0 button 5.68:1 (hover 7.21:1). */
+:root {
+  --glowthread-color-accent: #3366cc;
+  --glowthread-color-accent-text: #2a4b8d;
+  --glowthread-color-accent-bg: #2a4b8d;
+  --glowthread-color-accent-bg-hover: #233f78;
+  --glowthread-color-accent-subtle: #eaf0fb;
+  --glowthread-color-highlight: #f3f6fd;
+  --glowthread-night-color-accent: #88a3e8;
+  --glowthread-night-color-accent-text: #88a3e8;
+  --glowthread-night-color-accent-bg: #6d8fe0;
+  --glowthread-night-color-accent-bg-hover: #88a3e8;
+  --glowthread-night-color-accent-subtle: rgba(136, 163, 232, 0.2);
+  --glowthread-night-color-accent-badge: rgba(136, 163, 232, 0.16);
+  --glowthread-night-color-highlight: rgba(136, 163, 232, 0.12);
+}
+
+/* 2. Serif reading: comment text and report notes in a serif face, the controls stay in the
+      interface face. Larger text and looser lines for reading. */
+:root {
+  --glowthread-font-family-text: Georgia, "Noto Serif", "Source Han Serif SC", "Songti SC", serif;
+  --glowthread-font-size-body: 0.9375rem;
+  --glowthread-line-height-body: 1.75;
+}
+
+/* 3. Compact density: a smaller spacing unit, tighter rows and smaller avatars. Touch targets
+      on touch screens stay 44 px. */
+:root {
+  --glowthread-space: 0.2rem;
+  --glowthread-comment-padding-y: 0.625rem;
+  --glowthread-avatar-gap: 0.5rem;
+  --glowthread-avatar-size: 1.75rem;
+  --glowthread-line-height-body: 1.5;
+}
+
+/* 4. Square avatars. Optionally one neutral colour instead of the colour from the name
+      (keep 4.5:1 between the two). */
+:root {
+  --glowthread-avatar-radius: 4px;
+  /* --glowthread-avatar-bg: #e8e8e8;
+     --glowthread-avatar-fg: #404040;
+     --glowthread-night-avatar-bg: #33363b;
+     --glowthread-night-avatar-fg: #ededed; */
+}
+
+/* 5a. Dark-only skin or theme, no values to copy: put the switch class ext-glowthread-night on
+       <html> or <body>, and GlowThread uses its night values (and any --glowthread-night-*
+       the site sets). A skin adds it with OutputPage::addHtmlClasses(), a gadget or
+       MediaWiki:Common.js with document.documentElement.classList.add('ext-glowthread-night').
+       ext-glowthread-day does the opposite: light values even under the skin's night classes.
+       Nothing to add here in CSS. */
+
+/* 5b. Dark-only site in CSS alone: the night palette as the light values. Copy all of them,
+       they only work together (on-accent turns dark because accent-bg turns light). Prefer 5a
+       where you can: the hub's selection checkboxes draw their check mark as an image, white
+       unless night mode is on, so here it stays white on the light pink fill. */
+:root {
+  --glowthread-color-scheme: dark;
+  --glowthread-color-fg: #ededed;
+  --glowthread-color-fg-muted: #a1a1a1;
+  --glowthread-color-fg-subtle: #8f8f8f;
+  --glowthread-color-surface: #1c1e22;
+  --glowthread-color-surface-subtle: rgba(255, 255, 255, 0.06);
+  --glowthread-color-surface-strong: rgba(255, 255, 255, 0.1);
+  --glowthread-color-border: rgba(255, 255, 255, 0.1);
+  --glowthread-color-border-control: rgba(255, 255, 255, 0.38);
+  --glowthread-color-accent: #e88a98;
+  --glowthread-color-accent-text: #e88a98;
+  --glowthread-color-accent-bg: #e07a8a;
+  --glowthread-color-accent-bg-hover: #e88a98;
+  --glowthread-color-on-accent: #171717;
+  --glowthread-color-accent-subtle: rgba(232, 138, 152, 0.22);
+  --glowthread-color-accent-badge: rgba(232, 138, 152, 0.16);
+  --glowthread-color-highlight: rgba(232, 138, 152, 0.12);
+  --glowthread-color-danger: #ff8a80;
+  --glowthread-color-danger-subtle: rgba(255, 138, 128, 0.12);
+  --glowthread-color-warning: #f0b860;
+  --glowthread-color-warning-subtle: rgba(240, 184, 96, 0.12);
+  --glowthread-color-success: #6fd58f;
+  --glowthread-color-success-subtle: rgba(111, 213, 143, 0.12);
+  --glowthread-color-overlay-border: rgba(255, 255, 255, 0.12);
+  --glowthread-color-scrim: rgba(0, 0, 0, 0.56);
+  --glowthread-shadow-overlay: 0 0 #0000;
+  --glowthread-avatar-bg-saturation: 26%;
+  --glowthread-avatar-bg-lightness: 26%;
+  --glowthread-avatar-fg-saturation: 70%;
+  --glowthread-avatar-fg-lightness: 84%;
+}
+
+/* 6. One app only: the app roots and the overlay container carry the class
+      ext-glowthread-theme and data-glowthread-app ("comments" or "hub"). Here a denser
+      moderation hub, menus and sheets included. */
+.ext-glowthread-theme[data-glowthread-app="hub"] {
+  --glowthread-space: 0.2rem;
+  --glowthread-font-size-body: 0.8125rem;
+}
+
+/* 7. Pinned comments on a tint. A token set on a comment applies to that comment, and to the
+      replies inside it, which inherit it: the second rule keeps the replies untinted.
+      Contrast on the light tint: fg 16.9:1, fg-muted 5.4:1, accent-text 5.1:1. */
+.ext-glowthread-comment[data-glowthread-pinned] {
+  --glowthread-comment-bg: #f6f8fc;
+  --glowthread-night-comment-bg: rgba(255, 255, 255, 0.04);
+}
+.ext-glowthread-comment[data-glowthread-pinned] .ext-glowthread-comment {
+  --glowthread-comment-bg: transparent;
+  --glowthread-night-comment-bg: transparent;
+}

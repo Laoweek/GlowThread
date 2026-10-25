@@ -1,0 +1,16 @@
+{
+  "name": "glowthread-e2e",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "test": "playwright test",
+    "shots": "node scripts/review-shots.mjs",
+    "docs-shots": "node scripts/docs-shots.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0"
+  }
+}

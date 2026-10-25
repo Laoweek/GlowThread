@@ -1,0 +1,122 @@
+/*
+ * Motion, layer "components". Motion only marks a change of state: menus and popovers
+ * open (150 ms), sheets slide in (200 ms), a like lands (150 ms), a new comment slides
+ * into place, a linked comment is highlighted. prefers-reduced-motion turns it all off.
+ * Reka UI keeps closing content mounted until its animation ends.
+ */
+@keyframes gt-pop-in {
+  from { opacity: 0; transform: translateY(-2px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes gt-pop-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes gt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes gt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes gt-sheet-up-in {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes gt-sheet-up-out {
+  from { transform: none; }
+  to { transform: translateY(100%); }
+}
+/* Side sheets. No "left" or "right" in the names: for right-to-left languages ResourceLoader
+   (CSSJanus) flips the translateX below and would rename the animation-name references, but
+   not the @keyframes names. */
+@keyframes gt-sheet-side-in {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+@keyframes gt-sheet-side-out {
+  from { transform: none; }
+  to { transform: translateX(100%); }
+}
+@keyframes gt-enter {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+/* The tint bleeds 6 px past the row with a shadow, which never adds scrollable overflow. */
+@keyframes gt-highlight {
+  0%, 60% { background-color: var(--gt-v-color-highlight); box-shadow: 0 0 0 6px var(--gt-v-color-highlight); }
+  100% { background-color: transparent; box-shadow: 0 0 0 6px transparent; }
+}
+@keyframes gt-like {
+  0% { transform: scale(0.8); }
+  60% { transform: scale(1.12); }
+  100% { transform: none; }
+}
+@keyframes gt-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.gt-scope .gt-anim-pop[data-state="open"] {
+  animation: gt-pop-in var(--gt-v-duration-fast) var(--gt-v-ease-out);
+}
+.gt-scope .gt-anim-pop[data-state="closed"] {
+  animation: gt-pop-out calc(var(--gt-v-duration-exit) * 2 / 3) var(--gt-v-ease-in);
+}
+.gt-scope .gt-anim-fade[data-state="open"] {
+  animation: gt-fade-in var(--gt-v-duration-base) var(--gt-v-ease-out);
+}
+.gt-scope .gt-anim-fade[data-state="closed"] {
+  animation: gt-fade-out var(--gt-v-duration-exit) var(--gt-v-ease-in);
+}
+.gt-scope .gt-anim-sheet[data-state="open"] {
+  animation: gt-sheet-up-in var(--gt-v-duration-base) var(--gt-v-ease-out);
+}
+.gt-scope .gt-anim-sheet[data-state="closed"] {
+  animation: gt-sheet-up-out var(--gt-v-duration-exit) var(--gt-v-ease-in);
+}
+@media (min-width: 640px) {
+  .gt-scope .gt-anim-sheet[data-state="open"] {
+    animation-name: gt-sheet-side-in;
+  }
+  .gt-scope .gt-anim-sheet[data-state="closed"] {
+    animation-name: gt-sheet-side-out;
+  }
+}
+.gt-scope .gt-anim-enter {
+  animation: gt-enter var(--gt-v-duration-base) var(--gt-v-ease-out);
+}
+.gt-scope .gt-highlight {
+  animation: gt-highlight 2.4s ease-out;
+}
+.gt-scope .gt-anim-like {
+  animation: gt-like var(--gt-v-duration-fast) var(--gt-v-ease-out);
+}
+.gt-scope .gt-pulse {
+  animation: gt-pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gt-scope *,
+  .gt-scope *::before,
+  .gt-scope *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Keep the permalink highlight as a static tint for a moment instead of a fade. */
+  .gt-scope .gt-highlight {
+    animation: none !important;
+    background-color: var(--gt-v-color-highlight);
+    box-shadow: 0 0 0 6px var(--gt-v-color-highlight);
+  }
+}
+
+@keyframes gt-spin {
+  to { transform: rotate(360deg); }
+}
+.gt-scope .gt-spin {
+  animation: gt-spin 0.8s linear infinite;
+}

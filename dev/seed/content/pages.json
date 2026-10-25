@@ -1,0 +1,16 @@
+[
+  { "title": "Main Page", "file": "Main_Page.wiki", "state": "open" },
+  { "title": "Sourdough starter", "file": "Sourdough_starter.wiki", "state": "open" },
+  { "title": "Banana bread", "file": "Banana_bread.wiki", "state": "open" },
+  { "title": "Red lentil dal", "file": "Red_lentil_dal.wiki", "state": "open" },
+  { "title": "Crème brûlée", "file": "Creme_brulee.wiki", "state": "open" },
+  { "title": "Roasted tomato soup", "file": "Roasted_tomato_soup.wiki", "state": "open" },
+  { "title": "Herb focaccia", "file": "Herb_focaccia.wiki", "state": "open" },
+  { "title": "Buttermilk pancakes", "file": "Buttermilk_pancakes.wiki", "state": "locked" },
+  { "title": "Cold brew coffee", "file": "Cold_brew_coffee.wiki", "state": "closed" },
+  { "title": "Pickled red onions", "file": "Pickled_red_onions.wiki", "state": "open" },
+  { "title": "Kitchen talk", "file": "Kitchen_talk.wiki", "state": "open" },
+  { "title": "番茄炒蛋", "file": "Fanqie_chaodan.wiki", "state": "open" },
+  { "title": "Sandbox", "file": "Sandbox.wiki", "state": "open" },
+  { "title": "Sandbox/i18n", "file": "Sandbox_i18n.wiki", "state": "open" }
+]

@@ -1,0 +1,97 @@
+/*
+ * The GlowThread design system for a MediaWiki page. Each app's stylesheet imports this
+ * file, then Tailwind's utilities with its own @source list (see src/comments/styles.css).
+ *
+ * The layers only order the sources: the build (scripts/vite-plugin-mw-scope.mjs)
+ * scopes every rule to .gt-scope (the app root and its portal container) with a
+ * specificity skins cannot beat, then removes the layers.
+ */
+@layer tokens, theme, revert, base, components, utilities;
+@import "./tokens.css" layer(tokens);
+@import "tailwindcss/theme.css" layer(theme) prefix(gt);
+@import "./revert.css" layer(revert);
+@import "./preflight.css" layer(base);
+@import "./base.css" layer(base);
+@import "./motion.css" layer(components);
+
+/*
+ * Tailwind theme: only GlowThread's own values. Everything reads the resolved tokens
+ * (--gt-v-*, see tokens.css), so a site's --glowthread-* values reach every utility. No
+ * oklch() or color-mix(): Chrome 87 and Safari 14 drop them. Touch targets are written as
+ * 2.75rem (44 px), not on the spacing grid, so a denser --glowthread-space keeps them at 44 px.
+ */
+@theme inline {
+  --*: initial;
+  --spacing: var(--gt-v-space);
+  --breakpoint-sm: 40rem;
+
+  --color-fg: var(--gt-v-color-fg);
+  --color-fg-muted: var(--gt-v-color-fg-muted);
+  --color-fg-subtle: var(--gt-v-color-fg-subtle);
+  --color-bg: var(--gt-v-color-bg);
+  --color-surface: var(--gt-v-color-surface);
+  --color-surface-subtle: var(--gt-v-color-surface-subtle);
+  --color-surface-strong: var(--gt-v-color-surface-strong);
+  --color-border: var(--gt-v-color-border);
+  --color-border-control: var(--gt-v-color-border-control);
+  --color-accent: var(--gt-v-color-accent);
+  --color-accent-text: var(--gt-v-color-accent-text);
+  --color-accent-bg: var(--gt-v-color-accent-bg);
+  --color-accent-bg-hover: var(--gt-v-color-accent-bg-hover);
+  --color-on-accent: var(--gt-v-color-on-accent);
+  --color-accent-subtle: var(--gt-v-color-accent-subtle);
+  --color-accent-badge: var(--gt-v-color-accent-badge);
+  --color-highlight: var(--gt-v-color-highlight);
+  --color-danger: var(--gt-v-color-danger);
+  --color-danger-subtle: var(--gt-v-color-danger-subtle);
+  --color-warning: var(--gt-v-color-warning);
+  --color-warning-subtle: var(--gt-v-color-warning-subtle);
+  --color-success: var(--gt-v-color-success);
+  --color-success-subtle: var(--gt-v-color-success-subtle);
+  --color-overlay-border: var(--gt-v-color-overlay-border);
+  --color-scrim: var(--gt-v-color-scrim);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-sans: var(--gt-v-font-family);
+  --font-text: var(--gt-v-font-family-text);
+  --text-small: var(--gt-v-font-size-small);
+  --text-meta: var(--gt-v-font-size-meta);
+  --text-meta--line-height: var(--gt-v-line-height-meta);
+  --text-body: var(--gt-v-font-size-body);
+  --text-body--line-height: var(--gt-v-line-height-body);
+  --text-title: var(--gt-v-font-size-title);
+  --text-title--line-height: var(--gt-v-line-height-title);
+  --font-weight-normal: 400;
+  --font-weight-medium: var(--gt-v-font-weight-medium);
+  /* font-semibold is the strong weight: headings, bold text. */
+  --font-weight-semibold: var(--gt-v-font-weight-strong);
+  --font-weight-avatar: var(--gt-v-avatar-font-weight);
+
+  --radius-surface: var(--gt-v-radius-surface);
+  --radius-control: var(--gt-v-radius-control);
+  --radius-mark: var(--gt-v-radius-mark);
+  --radius-pill: var(--gt-v-radius-pill);
+  --radius-avatar: var(--gt-v-avatar-radius);
+  --radius-full: 9999px;
+  --default-border-width: var(--gt-v-border-width);
+  --shadow-overlay: var(--gt-v-shadow-overlay);
+
+  /* Sizes that are not on the spacing grid: icons (the others scale with icon-size) and avatars. */
+  --spacing-icon: var(--gt-v-icon-size);
+  --spacing-icon-sm: var(--gt-v-icon-size-small);
+  --spacing-icon-xs: calc(var(--gt-v-icon-size) * 0.75);
+  --spacing-icon-lg: calc(var(--gt-v-icon-size) * 1.125);
+  --spacing-icon-xl: calc(var(--gt-v-icon-size) * 1.25);
+  --spacing-icon-2xl: calc(var(--gt-v-icon-size) * 1.5);
+  --spacing-avatar: var(--gt-v-avatar-size);
+  --spacing-avatar-sm: var(--gt-v-avatar-size-small);
+
+  --z-index-sheet: var(--gt-v-z-sheet);
+  --z-index-popover: var(--gt-v-z-popover);
+  --z-index-toast: var(--gt-v-z-toast);
+
+  --ease-out: var(--gt-v-ease-out);
+  --default-transition-duration: var(--gt-v-duration-fast);
+  --default-transition-timing-function: var(--gt-v-ease-out);
+}

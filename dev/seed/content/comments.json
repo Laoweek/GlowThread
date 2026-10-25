@@ -1,0 +1,1246 @@
+{
+  "Sourdough starter": [
+    {
+      "ref": "sourdough-pinned",
+      "by": "Moderator",
+      "ago": "410d",
+      "pinned": true,
+      "likes": ["Alice", "Bob", "Carol", "Erin", "Trent"],
+      "text": "Pinned note: before asking whether your starter is dead, please read the Troubleshooting section. A quiet spell on days 2 to 4 is normal.\n\nOn mould: fuzzy spots, or pink or orange streaks, mean the starter goes in the bin. Please don't recommend scraping it off. Comments that do will be removed once reported.\n\nHappy baking!"
+    },
+    {
+      "ref": "sourdough-long-tip",
+      "by": "Trent",
+      "ago": "538d",
+      "likes": ["Admin", "Alice", "Bob", "Carol", "Dave", "Erin", "Moderator"],
+      "text": "Long-time baker here. These four things finally made my starters reliable after a few failed attempts.\n\n1. Temperature matters more than anything else. At 19 °C my last one took almost two weeks. At 24 °C it was ready on day 6. If your kitchen is cold, put the jar in the oven with only the light on, but check with a thermometer first, because some ovens get surprisingly warm that way.\n\n2. Use some whole grain flour for the whole first week, not just day 1. Rye especially. It brings more wild yeast and feeds it better than white flour does.\n\n3. Once it's going, feed by ratio. 1:1:1 (starter:flour:water) peaks in about 4 hours at room temperature. 1:5:5 takes closer to 12, which is handy if you feed it before bed and bake in the morning.\n\n4. Use your nose. Yoghurty and pleasantly sour means happy. Nail polish remover means hungry, so feed it more often.\n\nAnd if anything looks fuzzy, pink or orange, don't overthink it. Bin it and start again.",
+      "replies": [
+        {
+          "by": "Erin",
+          "ago": "536d",
+          "likes": ["Alice", "Trent"],
+          "text": "This should be in the article honestly."
+        },
+        {
+          "ref": "sourdough-merge-tip",
+          "by": "Moderator",
+          "ago": "530d",
+          "text": "@Trent mind if I fold points 1 and 3 into the Tips section? I'll credit you in the edit summary.",
+          "replies": [
+            {
+              "by": "Trent",
+              "ago": "529d",
+              "text": "@Moderator go for it."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "sourdough-thread",
+      "by": "Alice",
+      "ago": "300d",
+      "likes": ["Bob", "Carol"],
+      "text": "My starter doubles in about 3 hours and then collapses before I can use it. It's day 9. Is that a bad sign or a good one? My kitchen is pretty warm at the moment (around 27 °C).",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "299d",
+          "likes": ["Alice", "Carol", "Trent"],
+          "text": "That's a good sign! It's strong, it just runs out of food fast in the heat. Try feeding 1:3:3 instead of 1:1:1.",
+          "replies": [
+            {
+              "by": "Alice",
+              "ago": "298d",
+              "text": "@Bob 1:3:3 as in 1 part starter to 3 flour and 3 water? Sorry, ratios confuse me."
+            },
+            {
+              "by": "Bob",
+              "ago": "297d",
+              "likes": ["Alice"],
+              "text": "@Alice yes exactly. So 20 g starter, 60 g flour, 60 g water."
+            },
+            {
+              "by": "Carol",
+              "ago": "296d",
+              "text": "Or put it in the fridge for an hour right after feeding. Slows it right down."
+            }
+          ]
+        },
+        {
+          "by": "Trent",
+          "ago": "298d",
+          "likes": ["Alice", "Dave"],
+          "text": "Agree with Bob. Collapsing isn't a problem in itself, by the way. You can still use it a bit past the peak, the bread will just be a little more sour.",
+          "replies": [
+            {
+              "by": "Alice",
+              "ago": "296d",
+              "text": "@Trent good to know, I've been throwing out the batches that collapsed 😅"
+            },
+            {
+              "by": "Dave",
+              "ago": "295d",
+              "text": "@Alice don't throw it out, make pancakes with it!"
+            }
+          ]
+        },
+        {
+          "by": "Erin",
+          "ago": "296d",
+          "text": "Same problem here every summer. I moved mine to the coolest cupboard in the flat and now it peaks at about 5 hours, much easier to catch."
+        },
+        {
+          "ref": "sourdough-thread-update",
+          "by": "Alice",
+          "ago": "290d",
+          "likes": ["Bob", "Carol", "Dave", "Erin", "Moderator", "Trent"],
+          "text": "Update: 1:3:3 worked! It peaks at around 6 hours now. Baked my first loaf at the weekend and it actually has holes in it. Thanks @Bob @Trent @Erin",
+          "replies": [
+            {
+              "by": "Bob",
+              "ago": "289d",
+              "text": "Nice!! Pics or it didn't happen"
+            },
+            {
+              "by": "Alice",
+              "ago": "288d",
+              "text": "@Bob ha, I'll add one to the article once someone shows me how uploads work"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "Carol",
+      "ago": "520d",
+      "text": "Is there a reason to use rye or whole wheat for the first days? I only have plain white flour at home.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "519d",
+          "likes": ["Alice", "Carol"],
+          "text": "Whole grain flour still has the bran, which carries more wild yeast and more food for it. White works too, it's just slower. Give it a few extra days."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "480d",
+      "likes": ["Erin"],
+      "text": "Day 2 was SO bubbly and now on day 4 it's completely flat. Did I kill it?",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "479d",
+          "likes": ["Alice", "Bob", "Carol", "Dave"],
+          "text": "Not dead! The early bubbles come from bacteria that don't stick around. The yeast takes over later. Keep feeding and it should wake up again around day 5 to 7. I've added this to the Troubleshooting section."
+        },
+        {
+          "by": "Dave",
+          "ago": "472d",
+          "text": "It came back on day 6. You were right, thanks!"
+        }
+      ]
+    },
+    {
+      "ref": "sourdough-correction",
+      "by": "Erin",
+      "ago": "455d",
+      "likes": ["Moderator", "Trent"],
+      "text": "Small correction: step 3 says to discard all but 50 g, but the Tips section says to keep 100 g. Which one is it?",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "454d",
+          "likes": ["Erin"],
+          "text": "Good catch @Erin. The 100 g was left over from an older version of the page. It's 50 g everywhere now."
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.23",
+      "ago": "200d",
+      "text": "how do you know when its ready to bake with? mine smells like vinegar",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "199d",
+          "likes": ["Trent"],
+          "text": "A vinegar smell usually means it's hungry. Feed it a bit more often for a couple of days. It's ready when it doubles within 4 to 8 hours of a feed. Some people drop a spoonful in water and check if it floats, but that's not 100% reliable."
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "430d",
+      "likes": ["Alice", "Carol", "Dave", "Erin"],
+      "text": "PSA: don't screw the lid on tight. Mine pushed the lid off overnight and there was starter all over the shelf. The fridge smelled like a bakery for a week."
+    },
+    {
+      "ref": "sourdough-link",
+      "by": "Carol",
+      "ago": "380d",
+      "likes": ["Alice", "Trent"],
+      "text": "If the ratios in the comments are confusing, there's a clear explainer on baker's percentages here: https://example.org/articles/bakers-percentages\nIt helped me a lot with scaling recipes up and down."
+    },
+    {
+      "ref": "sourdough-misinfo",
+      "by": "Dave",
+      "ago": "40d",
+      "reports": [
+        { "by": "Carol", "reason": "misinfo", "note": "Pink or orange streaks mean bacteria. The article and the pinned note say to throw it out." },
+        { "by": "Trent", "reason": "misinfo" }
+      ],
+      "text": "Pink streaks are harmless, its just from the flour. I scrape the top off and keep going, have done for years without any problems. No need to throw out a good starter.",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "39d",
+          "likes": ["Alice", "Bob", "Dave", "Erin", "Trent"],
+          "text": "Please don't do this. Pink or orange means bacteria that you can't scrape away. The article and the pinned note both say to throw it out. Starting again only costs you a week."
+        }
+      ]
+    },
+    {
+      "ref": "sourdough-offtopic",
+      "by": "Mallory",
+      "ago": "12d",
+      "reports": [
+        { "by": "Erin", "reason": "offtopic", "note": "Selling things, not about the recipe" }
+      ],
+      "text": "Selling my stand mixer, barely used, still in the box. Anyone near the city centre interested? Reply here"
+    },
+    {
+      "ref": "sourdough-deleted",
+      "by": "Mallory",
+      "ago": "25d",
+      "status": "deleted",
+      "text": "lol who even bakes their own bread anymore. this whole wiki is a waste of time, just buy a loaf like a normal person"
+    },
+    {
+      "ref": "sourdough-held",
+      "by": "Newbie",
+      "ago": "3h",
+      "status": "held",
+      "text": "Hi everyone, first post here! Started my starter yesterday with all-purpose flour. Is it ok to use a plastic tub instead of a glass jar?"
+    },
+    {
+      "by": "Admin",
+      "ago": "350d",
+      "likes": ["Moderator"],
+      "text": "Heads-up: this page was moved from 'Sourdough Starter' to 'Sourdough starter' so it matches the other recipe titles. Old links redirect, nothing else changes."
+    },
+    {
+      "by": "Erin",
+      "ago": "150d",
+      "likes": ["Alice", "Bob", "Trent"],
+      "text": "Went on holiday for 3 weeks and left mine in the fridge unfed. There was a thick grey layer on top and it smelled like nail polish. Poured that off, did two feeds at room temperature and it's back to normal. They're tougher than you think!",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "149d",
+          "likes": ["Erin"],
+          "text": "Yep. A neglected starter is usually just hungry. Fuzzy or pink is the real dealbreaker."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "95d",
+      "text": "Does anyone dry some starter as a backup? I'm moving house next month and I'm worried about it.",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "94d",
+          "likes": ["Dave", "Trent"],
+          "text": "I spread a thin layer on baking paper, let it dry for a couple of days and crumbled it into a jar. Revived it later with a few feeds, it took about 4 days to be fully active again."
+        },
+        {
+          "by": "Dave",
+          "ago": "60d",
+          "text": "Moved, revived, all good. Thanks @Alice!"
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "18d",
+      "likes": ["Erin"],
+      "text": "Unpopular opinion: the discard step is wasteful. I keep a tiny starter (10 g) so there's barely anything to throw away.",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "17d",
+          "text": "Not unpopular at all, I do teh same. Small jar, small feeds."
+        },
+        {
+          "by": "Trent",
+          "ago": "16d",
+          "text": "Fair, though a bigger starter is more stable if your kitchen swings in temperature. Depends how often you bake.",
+          "replies": [
+            {
+              "by": "Alice",
+              "ago": "15d",
+              "text": "@Trent that's fair, my flat stays pretty constant."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "ip:2001:db8::17",
+      "ago": "9h",
+      "text": "Can I use bottled spring water? My tap water tastes a lot of chlorine.",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "7h",
+          "text": "Spring water is fine. Or leave tap water out overnight, most of the chlorine goes.",
+          "replies": [
+            {
+              "by": "Carol",
+              "ago": "5h",
+              "likes": ["Bob", "Moderator"],
+              "text": "@Bob only if it's chlorine though. Some places use chloramine, which doesn't go away by standing. Filtered or bottled is the safer bet."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "110d",
+      "likes": ["Alice", "Carol", "Dave", "Erin", "Trent"],
+      "text": "My starter is officially older than all my houseplants. It's called Bubbles and it has outlived three of them."
+    }
+  ],
+
+  "Banana bread": [
+    {
+      "by": "Carol",
+      "ago": "512d",
+      "likes": ["Alice", "Dave"],
+      "text": "Made this with 4 bananas because that's what I had. A bit denser but really moist. Needed 70 minutes.",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "510d",
+          "text": "4 is my go-to as well, I just add an extra spoon of flour."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "470d",
+      "likes": ["Erin"],
+      "text": "Swapped half the flour for whole wheat and it worked fine. Also used dark brown sugar, more caramelly."
+    },
+    {
+      "by": "Erin",
+      "ago": "440d",
+      "text": "Question: can I use oil instead of butter? Trying to make it dairy free.",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "439d",
+          "likes": ["Carol", "Erin"],
+          "text": "Yep, same amount of a neutral oil. I find it even stays moist longer."
+        },
+        {
+          "by": "Trent",
+          "ago": "438d",
+          "text": "Melted coconut oil works too if you like the flavour. Let it cool a little first so it doesn't cook the egg."
+        },
+        {
+          "by": "Erin",
+          "ago": "430d",
+          "text": "Made the oil version, nobody noticed a thing. Thanks!"
+        }
+      ]
+    },
+    {
+      "ref": "banana-correction",
+      "by": "Trent",
+      "ago": "400d",
+      "likes": ["Carol", "Moderator"],
+      "text": "Small fix: the ingredients say 190 g flour but step 4 says 'add the 200 g of flour'. Which is right?",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "399d",
+          "likes": ["Trent"],
+          "text": "190 g. The method had an old number, fixed now. Thanks @Trent"
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "380d",
+      "likes": ["Bob", "Carol", "Dave", "Erin", "Trent"],
+      "text": "If your chocolate chips all sink to the bottom, toss them in a spoonful of the flour before folding them in. Saving a handful to scatter on top looks nicer too.",
+      "replies": [
+        {
+          "by": "Dave",
+          "ago": "379d",
+          "text": "The flour trick works for blueberries too!"
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.41",
+      "ago": "300d",
+      "text": "Can this be made in muffin tins? How long would they take?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "299d",
+          "likes": ["Alice"],
+          "text": "Yes! About 20 to 25 minutes at the same temperature. Makes 12 regular muffins."
+        },
+        {
+          "by": "ip:198.51.100.41",
+          "ago": "298d",
+          "text": "thank you!!"
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "260d",
+      "text": "Mine always cracks down the middle on top. Is that bad?",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "259d",
+          "likes": ["Bob"],
+          "text": "Normal for a loaf cake, it means a good rise. If you want a neat crack, run a buttered knife down the middle before it goes in."
+        }
+      ]
+    },
+    {
+      "ref": "banana-spam",
+      "by": "Mallory",
+      "ago": "45d",
+      "reports": [
+        { "by": "Alice", "reason": "spam" },
+        { "by": "Dave", "reason": "spam" }
+      ],
+      "text": "Bananas going brown?? Get 70% OFF kitchen gadgets TODAY ONLY at http://spam.example/deals?ref=banana best prices anywhere!!!"
+    },
+    {
+      "by": "Dave",
+      "ago": "200d",
+      "likes": ["Carol", "Erin"],
+      "text": "Halved the sugar and it was still sweet enough. My bananas were very ripe though.",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "199d",
+          "text": "I tried halving it and it tasted a bit flat to me. Maybe my bananas weren't ripe enough. Will try again."
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "130d",
+      "likes": ["Alice", "Bob", "Dave", "Trent"],
+      "text": "Added a teaspoon of cinnamon and a pinch of cardamom. Highly recommend 👌",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "128d",
+          "text": "Cardamom in banana bread, why have I never thought of this"
+        }
+      ]
+    },
+    {
+      "by": "ip:203.0.113.8",
+      "ago": "20d",
+      "text": "mine came out raw in the middle even after 65 minutes, oven was at 175. what did i do wrong?",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "19d",
+          "text": "A lot of ovens run cold, an oven thermometer is cheap and worth it. Also check your tin. A narrower, deeper tin needs longer."
+        },
+        {
+          "by": "Trent",
+          "ago": "18d",
+          "likes": ["Bob"],
+          "text": "And check how much banana went in. 350 g peeled is the target. More banana means more moisture and a longer bake."
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "4d",
+      "likes": ["Carol"],
+      "text": "Third time this month. My family has stopped asking what the brown bananas on the counter are for 🍌"
+    }
+  ],
+
+  "Red lentil dal": [
+    {
+      "by": "Trent",
+      "ago": "530d",
+      "likes": ["Alice", "Carol"],
+      "text": "Been making this almost every week. Rinse the lentils well, otherwise you get a ton of foam."
+    },
+    {
+      "by": "Erin",
+      "ago": "490d",
+      "text": "Can I use yellow split peas instead? That's all my shop had.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "489d",
+          "likes": ["Erin"],
+          "text": "You can, but they take a lot longer, more like 45 to 60 minutes, and need more water. Soak them for a few hours first if you can."
+        },
+        {
+          "by": "Erin",
+          "ago": "485d",
+          "text": "Took about 50 minutes. Delicious though."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "420d",
+      "likes": ["Alice", "Bob", "Carol", "Erin", "Moderator", "Trent"],
+      "text": "I swap 400 ml of the water for a tin of coconut milk, added halfway through. Makes it really creamy.",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "419d",
+          "text": "Doing this tonight!"
+        },
+        {
+          "by": "Bob",
+          "ago": "415d",
+          "text": "Tried it. It's great, but a lot richer. I prefer the original for a weeknight.",
+          "replies": [
+            {
+              "by": "Dave",
+              "ago": "414d",
+              "text": "@Bob fair, I usually do half a tin these days."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ref": "dal-correction",
+      "by": "Bob",
+      "ago": "380d",
+      "likes": ["Dave"],
+      "text": "The ginger: peeled or not? And how much is a thumb? My thumbs are big lol",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "379d",
+          "likes": ["Bob", "Erin"],
+          "text": "About a 3 cm piece, peeled. Scrape the skin off with a teaspoon, easiest way."
+        },
+        {
+          "by": "Moderator",
+          "ago": "378d",
+          "text": "Changed the list to 'a 3 cm piece of ginger, peeled and grated'. Thanks both."
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.9",
+      "ago": "330d",
+      "text": "is this spicy? cooking for kids",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "329d",
+          "likes": ["Erin"],
+          "text": "Not really, the chillies are optional. Leave them out and it's very mild. My kids have it with rice and yoghurt."
+        }
+      ]
+    },
+    {
+      "by": "Carol",
+      "ago": "270d",
+      "likes": ["Alice", "Dave", "Erin", "Trent"],
+      "text": "Frying the spices separately and adding them at the end makes such a difference. I got lazy once and boiled everything together, it tasted flat.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "268d",
+          "text": "Yep, that's where most of the flavour comes from. The hot oil wakes the spices up."
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "200d",
+      "likes": ["Bob"],
+      "text": "Made it with brown lentils because I misread the label. They didn't break down at all, so it was more of a lentil stew. Still tasty, but not dal. Lesson learned 😅",
+      "replies": [
+        {
+          "by": "Dave",
+          "ago": "199d",
+          "text": "Happens to the best of us. Red lentils are the orange ones, which makes no sense at all",
+          "replies": [
+            {
+              "by": "Alice",
+              "ago": "198d",
+              "text": "@Dave right?? Who named these"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "140d",
+      "text": "Maybe a correction? Step 1 says 20 minutes but mine needed about 25 to break down properly.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "139d",
+          "text": "Depends how old the lentils are. The ones from the back of the cupboard take longer."
+        },
+        {
+          "by": "Moderator",
+          "ago": "138d",
+          "text": "Changed it to 'about 20 minutes' since it varies. The 'until soft' part is what matters."
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "90d",
+      "text": "Froze half of it in portions and it reheats perfectly. Lunches sorted for two weeks."
+    },
+    {
+      "by": "ip:2001:db8::4",
+      "ago": "30d",
+      "text": "Can this be made in a pressure cooker?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "29d",
+          "likes": ["Bob"],
+          "text": "Yes. About 6 minutes at high pressure for red lentils, then let the pressure drop on its own. Do the spice and onion part in a pan and stir it in afterwards."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "8d",
+      "text": "Used lime instead of lemon, works great. Also there's a handy list of spice swaps at https://example.com/kitchen/spice-swaps if you're out of cumin seeds."
+    }
+  ],
+
+  "Crème brûlée": [
+    {
+      "ref": "creme-correction",
+      "by": "Carol",
+      "ago": "500d",
+      "likes": ["Alice"],
+      "text": "The intro says 6 egg yolks but the ingredient list says 5. Which one?",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "499d",
+          "likes": ["Carol", "Trent"],
+          "text": "5 is right, the intro was from an earlier draft. Fixed, thanks @Carol"
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "470d",
+      "text": "I don't have a torch. Does the grill method actually work?",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "469d",
+          "likes": ["Alice", "Bob", "Dave", "Erin"],
+          "text": "It works but it's trickier. Heat the grill as hot as it goes, put the ramekins as close as you can and check every 20 seconds. Chill them for 10 minutes afterwards, because the grill warms the custard."
+        },
+        {
+          "by": "Bob",
+          "ago": "460d",
+          "text": "Grill method here, works fine. Just don't walk away. Ask me how I know.",
+          "replies": [
+            {
+              "by": "Alice",
+              "ago": "459d",
+              "text": "@Bob how do you know 😄"
+            },
+            {
+              "by": "Bob",
+              "ago": "458d",
+              "text": "@Alice smoke alarm. Neighbours. Long story."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "420d",
+      "text": "Mine were runny in the middle after 40 minutes. My ramekins are quite deep. Bake longer next time?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "419d",
+          "text": "Deep ramekins need longer, sometimes up to 50 minutes. Look for a set edge and a jelly-like wobble in the centre, not a liquid slosh."
+        },
+        {
+          "by": "Erin",
+          "ago": "410d",
+          "text": "Gave them 48 minutes, perfect."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "350d",
+      "text": "Can I make these with milk instead of cream? Trying to make them lighter.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "349d",
+          "likes": ["Carol", "Dave"],
+          "text": "Half milk, half cream works. All milk won't set the same and tastes eggy. Honestly it's dessert, go for the cream 😉"
+        }
+      ]
+    },
+    {
+      "by": "ip:203.0.113.62",
+      "ago": "290d",
+      "text": "Is it safe to eat? the eggs dont seem very cooked",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "289d",
+          "likes": ["Carol"],
+          "text": "Yes. The custard is baked until set, which cooks the yolks. If you want to check, a thermometer in the centre should read about 80 °C when they're done."
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "240d",
+      "text": "Made these with orange zest in the cream instead of vanilla. Really good.",
+      "replies": [
+        {
+          "by": "Erin",
+          "ago": "239d",
+          "text": "Ooh. Lavender is nice too, but go easy, too much tastes like soap."
+        }
+      ]
+    },
+    {
+      "ref": "creme-long-tip",
+      "by": "Trent",
+      "ago": "180d",
+      "likes": ["Admin", "Alice", "Bob", "Carol", "Dave", "Erin", "Moderator"],
+      "text": "A few things that took mine from fine to really good:\n- Strain twice, once after mixing and once into the ramekins.\n- Fold a tea towel into the bottom of the roasting tin so the ramekins don't sit right on the hot metal. The texture comes out smoother.\n- Use caster sugar for the top and spread it thin and even. Two thin layers, caramelised one after the other, beat one thick layer.\n- Let the sugar cool for a minute before serving so it's properly crisp."
+    },
+    {
+      "by": "Alice",
+      "ago": "120d",
+      "text": "What can I do with the 5 leftover egg whites?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "119d",
+          "text": "Meringues, like the tips say! Or an omelette, or freeze them in a labelled bag for later."
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "50d",
+      "likes": ["Alice", "Bob", "Carol"],
+      "text": "Made these for my partner's birthday and they thought I'd bought them from a restaurant. I'm not telling them otherwise."
+    },
+    {
+      "by": "Dave",
+      "ago": "11d",
+      "text": "The sugar went black and bitter in spots with my torch. Too close?",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "10d",
+          "text": "Probably. Keep the flame moving, a few cm above the sugar, like you're spray painting."
+        }
+      ]
+    }
+  ],
+
+  "Roasted tomato soup": [
+    {
+      "ref": "soup-correction",
+      "by": "Bob",
+      "ago": "540d",
+      "likes": ["Moderator"],
+      "text": "The oven temperature in step 1 says 220 but the intro says 200. Which one? I went with 200 and it took about 50 minutes.",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "539d",
+          "likes": ["Bob", "Carol"],
+          "text": "Good catch @Bob, it's 200 °C. The 220 was a typo. I fixed step 1 and took the temperature out of the intro so they can't disagree again."
+        }
+      ]
+    },
+    {
+      "by": "Carol",
+      "ago": "500d",
+      "likes": ["Alice", "Erin"],
+      "text": "If your tomatoes are watery, halve them and leave them cut side down on a rack for 10 minutes before roasting. Less juice on the tray, more flavour."
+    },
+    {
+      "by": "Alice",
+      "ago": "450d",
+      "likes": ["Dave"],
+      "text": "Added a red pepper to the tray, lovely and sweet.",
+      "replies": [
+        {
+          "by": "Dave",
+          "ago": "449d",
+          "text": "And a carrot. The kids love it even more."
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.88",
+      "ago": "390d",
+      "text": "can i use tinned tomatoes instead?",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "389d",
+          "likes": ["Erin"],
+          "text": "You can skip roasting and just simmer two tins with the onion and garlic, but you lose the roasted flavour. Roasting drained whole tinned tomatoes is a decent middle ground."
+        },
+        {
+          "by": "Erin",
+          "ago": "388d",
+          "text": "I do the drained tinned ones on a tray for 25 minutes in winter. Works well."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "330d",
+      "text": "Mine came out a bit sour. Added the sugar and a pinch of baking soda, which fixed it. Anyone else do the baking soda thing?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "329d",
+          "text": "Yes, but only a tiny pinch. It foams up, and too much makes it taste soapy."
+        },
+        {
+          "by": "Trent",
+          "ago": "320d",
+          "text": "I'd add a spoon of cream or butter instead. Rounds it out without the chemistry experiment 🙂"
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "280d",
+      "likes": ["Alice", "Bob", "Carol", "Dave", "Trent"],
+      "text": "The blender warning is no joke. I painted my ceiling orange last year.",
+      "replies": [
+        {
+          "by": "Bob",
+          "ago": "279d",
+          "text": "😂 the blender lid has claimed many victims"
+        },
+        {
+          "by": "Alice",
+          "ago": "278d",
+          "likes": ["Erin"],
+          "text": "Stick blender in the pot is the way. Fewer dishes too."
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "200d",
+      "text": "Crusty bread or grilled cheese on the side? Asking for science.",
+      "replies": [
+        {
+          "by": "Dave",
+          "ago": "199d",
+          "text": "Grilled cheese, no question."
+        },
+        {
+          "by": "Carol",
+          "ago": "198d",
+          "text": "Croutons made from yesterday's focaccia. Best of both.",
+          "replies": [
+            {
+              "by": "Bob",
+              "ago": "197d",
+              "text": "@Carol ok that's genius"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "Trent",
+      "ago": "120d",
+      "likes": ["Alice"],
+      "text": "Freezes well. I make a double batch in tomato season and freeze it in 500 ml tubs. Leave some room at the top, it expands."
+    },
+    {
+      "by": "Alice",
+      "ago": "40d",
+      "text": "Small thing: the ingredients say the sugar is optional but step 5 just said 'adjust the salt and sugar', like you have to add it. Confused me a bit.",
+      "replies": [
+        {
+          "by": "Moderator",
+          "ago": "39d",
+          "likes": ["Alice"],
+          "text": "Fair point, I reworded step 5 to say to add the sugar only if the soup tastes sharp."
+        }
+      ]
+    },
+    {
+      "by": "ip:203.0.113.19",
+      "ago": "6d",
+      "text": "do you blend the garlic with the skins on?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "5d",
+          "text": "No, squeeze the cloves out and throw the skins away. They're papery and won't blend smooth."
+        }
+      ]
+    }
+  ],
+
+  "Herb focaccia": [
+    {
+      "by": "Alice",
+      "ago": "470d",
+      "likes": ["Bob"],
+      "text": "The dough is SO sticky. Is that right? I almost added more flour.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "469d",
+          "likes": ["Alice", "Carol", "Dave", "Erin"],
+          "text": "Don't add flour, it's meant to be wet. It's 80% hydration. Wet your hands and it becomes manageable."
+        },
+        {
+          "by": "Alice",
+          "ago": "465d",
+          "text": "Resisted the urge. It was great!"
+        }
+      ]
+    },
+    {
+      "by": "Bob",
+      "ago": "430d",
+      "likes": ["Carol", "Trent"],
+      "text": "The overnight version is so much better than same day. Way more flavour.",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "428d",
+          "text": "Agreed. 24 hours in the fridge is my sweet spot."
+        },
+        {
+          "by": "Dave",
+          "ago": "420d",
+          "text": "I tried 48 hours and it was too boozy for me. 24 is the max imo."
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "390d",
+      "likes": ["Alice", "Dave"],
+      "text": "Topped mine with cherry tomatoes and olives pressed into the dimples. Photo here: https://example.net/photos/focaccia-tomatoes.jpg"
+    },
+    {
+      "by": "Dave",
+      "ago": "330d",
+      "text": "The bottom wasn't crispy, more pale and soft. Any ideas?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "329d",
+          "likes": ["Bob", "Dave"],
+          "text": "Use a metal tin, not glass or ceramic. And be generous with the oil, it basically fries the base."
+        },
+        {
+          "by": "Bob",
+          "ago": "328d",
+          "text": "Also move it to the bottom shelf for the last 10 minutes."
+        },
+        {
+          "by": "Dave",
+          "ago": "320d",
+          "likes": ["Carol"],
+          "text": "Metal tin plus bottom shelf fixed it. Thanks @Carol @Bob"
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.150",
+      "ago": "260d",
+      "text": "what can i use if i dont have instant yeast",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "259d",
+          "text": "Active dry yeast works. Use about 9 g and stir it into some of the warm water for 10 minutes first."
+        }
+      ]
+    },
+    {
+      "by": "Carol",
+      "ago": "210d",
+      "likes": ["Alice", "Trent"],
+      "text": "Made the sourdough version from the tips. It took about 5 hours to rise in the tin, but the flavour was worth it.",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "209d",
+          "text": "How sour was it? I'm not a big fan of sour bread",
+          "replies": [
+            {
+              "by": "Carol",
+              "ago": "208d",
+              "text": "@Alice not very, it was mild. A young starter, fed a few hours before, keeps it mild."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "150d",
+      "text": "Halved the recipe for a 20 × 20 cm tin and baked it for 22 minutes. Perfect for two."
+    },
+    {
+      "by": "Bob",
+      "ago": "80d",
+      "likes": ["Alice", "Carol", "Dave", "Erin", "Moderator", "Trent"],
+      "text": "Garlic confit on top. That's it, that's the comment.",
+      "replies": [
+        {
+          "by": "Erin",
+          "ago": "79d",
+          "text": "Bob with the elite suggestions again"
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "35d",
+      "text": "Can I freeze it?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "34d",
+          "text": "Yes, wrap slices well and freeze. Reheat in a hot oven for 5 to 8 minutes and it crisps up again."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "3d",
+      "text": "Dimpling the dough is definately the most satisfying step of any recipe. Fight me."
+    }
+  ],
+
+  "Buttermilk pancakes": [
+    {
+      "by": "Bob",
+      "ago": "545d",
+      "likes": ["Alice", "Carol", "Dave", "Erin"],
+      "text": "Best pancakes I've made. The resting time really matters."
+    },
+    {
+      "by": "Carol",
+      "ago": "520d",
+      "likes": ["Bob"],
+      "text": "No buttermilk, so I used the lemon juice trick from the tips. Worked perfectly."
+    },
+    {
+      "by": "Dave",
+      "ago": "500d",
+      "text": "Mine came out flat and rubbery. What happened?",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "499d",
+          "likes": ["Alice", "Dave"],
+          "text": "Probably overmixed. Stir until just combined and stop, lumps are fine. Also check your baking powder isn't ancient."
+        },
+        {
+          "by": "Dave",
+          "ago": "490d",
+          "text": "Ancient baking powder. It expired 2 years ago 🙈 New tin, perfect pancakes."
+        }
+      ]
+    },
+    {
+      "by": "Erin",
+      "ago": "470d",
+      "likes": ["Alice", "Bob", "Carol", "Moderator", "Trent"],
+      "text": "Blueberry tip: don't stir them into the batter, drop them onto each pancake right after pouring. Stops the whole batch going purple.",
+      "replies": [
+        {
+          "by": "Alice",
+          "ago": "469d",
+          "text": "Same with chocolate chips"
+        }
+      ]
+    },
+    {
+      "by": "ip:203.0.113.77",
+      "ago": "430d",
+      "text": "can i make the batter the night before?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "429d",
+          "likes": ["Bob", "Erin"],
+          "text": "I wouldn't. The baking soda starts working as soon as it's wet, so they come out flatter. Mix the dry and the wet in separate bowls the night before and combine them in the morning."
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "380d",
+      "likes": ["Trent"],
+      "text": "Used 100 ml of sourdough discard like the tips suggest. Slightly tangy and extra fluffy, great use for discard."
+    },
+    {
+      "by": "Bob",
+      "ago": "330d",
+      "text": "Is medium-low really right? Mine take forever at that heat.",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "329d",
+          "text": "Medium-low is right for thick pancakes. Higher heat burns the outside before the middle cooks. Give the pan a good 5 minutes to heat up first."
+        },
+        {
+          "by": "Carol",
+          "ago": "328d",
+          "text": "I start on medium for the first one, then turn it down. The pan keeps getting hotter."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "250d",
+      "text": "Made a double batch for brunch and everyone asked for the recipe. Sent them the link 🙂"
+    },
+    {
+      "by": "Erin",
+      "ago": "180d",
+      "likes": ["Carol", "Moderator"],
+      "text": "Gluten free version with a 1:1 gluten-free flour blend works. Slightly more delicate. Rest the batter for 20 minutes instead of 10."
+    },
+    {
+      "by": "Carol",
+      "ago": "120d",
+      "text": "Why both baking powder and baking soda?",
+      "replies": [
+        {
+          "by": "Trent",
+          "ago": "119d",
+          "likes": ["Alice", "Bob", "Carol"],
+          "text": "The soda reacts with the acid in the buttermilk for lift and browning, and the powder adds extra lift on top. With only one of them you get flatter or paler pancakes."
+        },
+        {
+          "by": "Carol",
+          "ago": "118d",
+          "text": "That makes sense, thanks!"
+        }
+      ]
+    },
+    {
+      "by": "Alice",
+      "ago": "95d",
+      "likes": ["Bob", "Dave"],
+      "text": "'The first pancake is always a test pancake.' Truest words on this wiki."
+    },
+    {
+      "ref": "pancakes-lock-notice",
+      "by": "Moderator",
+      "ago": "60d",
+      "pinned": true,
+      "likes": ["Alice", "Erin"],
+      "text": "Comments on this page are now locked. The common questions (buttermilk swaps, flat pancakes, gluten free) are answered above and in the tips. Thanks everyone!"
+    }
+  ],
+
+  "Cold brew coffee": [
+    {
+      "by": "Trent",
+      "ago": "400d",
+      "likes": ["Bob"],
+      "text": "Tried a 1:8 ratio instead of 1:10 for a stronger concentrate, then diluted 1:1. Excellent."
+    },
+    {
+      "by": "Bob",
+      "ago": "380d",
+      "text": "Can you steep it in the fridge instead of at room temperature?",
+      "replies": [
+        {
+          "by": "Carol",
+          "ago": "379d",
+          "likes": ["Bob"],
+          "text": "Yes, just give it longer. 18 to 24 hours."
+        }
+      ]
+    },
+    {
+      "by": "ip:198.51.100.200",
+      "ago": "300d",
+      "text": "too bitter, what grind should i use exactly",
+      "replies": [
+        {
+          "by": "Erin",
+          "ago": "299d",
+          "text": "Coarse, like coarse salt or breadcrumbs. If it looks like powder it's too fine."
+        }
+      ]
+    },
+    {
+      "by": "Dave",
+      "ago": "220d",
+      "text": "Add a cinnamon stick while it steeps. Trust me."
+    },
+    {
+      "by": "Alice",
+      "ago": "150d",
+      "likes": ["Bob", "Dave", "Erin", "Trent"],
+      "text": "Freeze some of the cold brew into ice cubes so your coffee doesn't get watery. Life changing.",
+      "replies": [
+        {
+          "by": "Dave",
+          "ago": "149d",
+          "text": "Big brain move"
+        }
+      ]
+    },
+    {
+      "ref": "coldbrew-closed-notice",
+      "by": "Moderator",
+      "ago": "100d",
+      "text": "Comments on this page are closed while we rewrite the article. Thanks for all the tips, they'll go into the new version."
+    }
+  ]
+}

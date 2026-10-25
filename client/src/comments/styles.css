@@ -1,0 +1,7 @@
+/* Comment section stylesheet: the design system plus the utilities this app uses.
+   source(none) keeps Tailwind from scanning other apps (src/admin/) into this bundle. */
+@import "../design/index.css";
+@import "tailwindcss/utilities.css" layer(utilities) prefix(gt) source(none);
+@source "../ui";
+@source "../shared";
+@source "./";

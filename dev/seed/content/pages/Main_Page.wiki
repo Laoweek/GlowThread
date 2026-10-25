@@ -1,0 +1,30 @@
+'''Welcome to the GlowThread Dev Cookbook!'''
+
+This is a small community cookbook used to develop and test the GlowThread comment extension. The recipes, members and comments are all made up for testing. Read a recipe, cook it if you like, and leave a note in the comments below it.
+
+== Recipes ==
+=== Bread and baking ===
+* [[Sourdough starter]]
+* [[Herb focaccia]]
+* [[Banana bread]]
+* [[Buttermilk pancakes]]
+
+=== Savoury ===
+* [[Red lentil dal]]
+* [[Roasted tomato soup]]
+* [[Pickled red onions]]
+
+=== Desserts and drinks ===
+* [[Crème brûlée]]
+* [[Cold brew coffee]]
+
+== Kitchen talk ==
+[[Kitchen talk]] is the cookbook's open food chat: restaurants, coffee, markets and kitchen stories. Its comments are real public comments from the CC0 Civil Comments archive, chosen and reviewed for this wiki.
+
+== Commenting ==
+Questions, substitutions and "it went wrong, here is why" stories are all welcome under each recipe. Please keep it kind and on topic. Moderators remove spam and advice that goes against basic food safety.
+
+== Testing ==
+* [[Sandbox]] is a scratch page for test scripts.
+* [[Sandbox/i18n]] holds multilingual test comments.
+* [[番茄炒蛋]] (tomato and egg stir-fry) is a recipe in Chinese with a Chinese discussion, for the screenshots of the Chinese documentation.

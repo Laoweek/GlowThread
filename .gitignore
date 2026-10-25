@@ -1,0 +1,23 @@
+# Local working folders, never committed.
+/private/
+/.agent-notes/
+# Local Compose additions that hide those folders from the dev containers (dev/README.md).
+/dev/compose.override.yaml
+
+# Local design-review captures.
+/.impeccable/review/
+/.impeccable/mocks/
+/.impeccable/build/
+/.impeccable/config.local.json
+
+# Dependencies, caches and secrets anywhere in the tree.
+node_modules/
+vendor/
+composer.lock
+.env
+.env.*
+*.local
+.DS_Store
+
+# Python caches (dev/seed/dataset/build.py)
+__pycache__/

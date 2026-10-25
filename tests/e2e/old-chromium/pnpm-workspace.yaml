@@ -1,0 +1,5 @@
+# Its own workspace root, so that pnpm install here uses this folder's lockfile and not the
+# parent tests/e2e workspace. Supply-chain hardening as in ../pnpm-workspace.yaml:
+# only versions published at least 7 days ago, no trust downgrades.
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade

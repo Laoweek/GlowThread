@@ -1,0 +1,17 @@
+/*
+ * Scoped reset, layer "revert". Every element of the app and of its portal container
+ * first reverts every property to the browser default, so a skin or site rule with up
+ * to one ID (`#content a`, `.mw-body h2`) cannot reach in. Preflight, the base rules and
+ * the utilities then build the styles up again with a heavier selector (see
+ * scripts/vite-plugin-mw-scope.mjs).
+ *
+ * SVG elements are skipped: `revert` would also drop their presentation attributes and
+ * geometry (Lucide's fill="none", stroke-width, and in Chrome even `d`, `cx`, `r`).
+ * The :not() chain uses one simple selector each, which Chrome 87 understands.
+ */
+.gt-scope,
+.gt-scope *:not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon):not(ellipse),
+.gt-scope *::before,
+.gt-scope *::after {
+  all: revert;
+}

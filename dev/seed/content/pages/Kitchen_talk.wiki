@@ -1,0 +1,11 @@
+'''Kitchen talk''' is the cookbook's general chat page: restaurants you love, markets, coffee, baking wins and disasters, food prices and local food events. Anything about food that does not belong under a single recipe goes here.
+
+== Before you post ==
+* Be kind and stay on food.
+* Name the dish, not the person.
+* A recipe with full steps deserves its own page. Link to it from here.
+
+== About these comments ==
+The comments below are real public comments from the Civil Comments archive (news sites, 2015 to 2017, released under CC0), picked because they talk about food. The original authors are unknown, so each comment appears under one of this wiki's test accounts or a documentation address, and the dates are squeezed into the last year. The file dev/seed/dataset/README.md in the GlowThread repository explains the selection.
+
+Back to the [[Main Page]].

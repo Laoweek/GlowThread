@@ -1,0 +1,668 @@
+{
+	"name": "GlowThread",
+	"version": "0.1.0",
+	"author": [
+		"GlowThread contributors"
+	],
+	"url": "https://github.com/Laoweek/GlowThread",
+	"descriptionmsg": "glowthread-desc",
+	"license-name": "MIT",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.43"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\GlowThread\\": "includes/"
+	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\GlowThread\\Tests\\Unit\\": "tests/phpunit/unit/",
+		"MediaWiki\\Extension\\GlowThread\\Tests\\Integration\\": "tests/phpunit/integration/"
+	},
+	"MessagesDirs": {
+		"GlowThread": [
+			"i18n",
+			"i18n/api",
+			"i18n/ui"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"GlowThreadAlias": "GlowThread.alias.php"
+	},
+	"callback": "MediaWiki\\Extension\\GlowThread\\Log\\LegacyLogType::onRegistration",
+	"ServiceWiringFiles": [
+		"includes/ServiceWiring.php",
+		"includes/Compat/ServiceWiring.php"
+	],
+	"AvailableRights": [
+		"glowthread-post",
+		"glowthread-react",
+		"glowthread-report",
+		"glowthread-trusted",
+		"glowthread-moderate",
+		"glowthread-erase",
+		"glowthread-configure",
+		"glowthread-viewlog"
+	],
+	"GroupPermissions": {
+		"user": {
+			"glowthread-post": true,
+			"glowthread-react": true,
+			"glowthread-report": true
+		},
+		"sysop": {
+			"glowthread-trusted": true,
+			"glowthread-moderate": true,
+			"glowthread-erase": true,
+			"glowthread-configure": true
+		},
+		"bot": {
+			"glowthread-trusted": true
+		}
+	},
+	"GrantPermissions": {
+		"basic": {
+			"glowthread-viewlog": true
+		},
+		"editpage": {
+			"glowthread-post": true,
+			"glowthread-react": true,
+			"glowthread-report": true
+		},
+		"delete": {
+			"glowthread-moderate": true
+		},
+		"oversight": {
+			"glowthread-erase": true
+		},
+		"editsiteconfig": {
+			"glowthread-configure": true
+		}
+	},
+	"RateLimits": {
+		"glowthread-post": {
+			"user": [
+				6,
+				60
+			],
+			"newbie": [
+				3,
+				60
+			],
+			"ip": [
+				3,
+				60
+			],
+			"ip-all": [
+				12,
+				60
+			],
+			"subnet-all": [
+				24,
+				60
+			]
+		},
+		"glowthread-react": {
+			"user": [
+				60,
+				60
+			],
+			"newbie": [
+				30,
+				60
+			],
+			"ip": [
+				30,
+				60
+			],
+			"ip-all": [
+				120,
+				60
+			],
+			"subnet-all": [
+				240,
+				60
+			]
+		},
+		"glowthread-report": {
+			"user": [
+				20,
+				86400
+			],
+			"newbie": [
+				5,
+				86400
+			],
+			"ip": [
+				5,
+				86400
+			],
+			"ip-all": [
+				30,
+				86400
+			],
+			"subnet-all": [
+				60,
+				86400
+			]
+		},
+		"glowthread-moderate": {
+			"user": [
+				120,
+				60
+			],
+			"ip-all": [
+				240,
+				60
+			],
+			"subnet-all": [
+				480,
+				60
+			]
+		},
+		"glowthread-erase": {
+			"user": [
+				30,
+				3600
+			],
+			"ip-all": [
+				60,
+				3600
+			],
+			"subnet-all": [
+				120,
+				3600
+			],
+			"&can-bypass": false
+		},
+		"glowthread-configure": {
+			"user": [
+				60,
+				60
+			],
+			"ip-all": [
+				120,
+				60
+			],
+			"subnet-all": [
+				240,
+				60
+			],
+			"&can-bypass": false
+		}
+	},
+	"LogTypes": [
+		"glowthread",
+		"glowthread-private"
+	],
+	"LogRestrictions": {
+		"glowthread": "glowthread-viewlog",
+		"glowthread-private": "glowthread-erase"
+	},
+	"FilterLogTypes": {
+		"glowthread": true
+	},
+	"ActionFilteredLogs": {
+		"glowthread": {
+			"delete": [
+				"delete"
+			],
+			"recover": [
+				"recover"
+			],
+			"approve": [
+				"approve"
+			],
+			"erase": [
+				"erase"
+			],
+			"markchecked": [
+				"markchecked"
+			],
+			"autohold": [
+				"autohold"
+			],
+			"pin": [
+				"pin",
+				"unpin"
+			],
+			"pagestate": [
+				"enable",
+				"disable",
+				"lock"
+			],
+			"settings": [
+				"settings"
+			],
+			"import": [
+				"import"
+			],
+			"undo": [
+				"undo"
+			]
+		}
+	},
+	"LogActionsHandlers": {
+		"glowthread/*": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Log\\CommentsLogFormatter",
+			"services": [
+				"GlowThread.LogAuthorLookup"
+			]
+		},
+		"glowthread-private/*": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Log\\CommentsLogFormatter",
+			"services": [
+				"GlowThread.LogAuthorLookup"
+			]
+		}
+	},
+	"APIModules": {
+		"glowthreadpost": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadPost",
+			"services": [
+				"GlowThread.PostingService",
+				"GlowThread.CommentQueryService"
+			]
+		},
+		"glowthreadreact": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadReact",
+			"services": [
+				"GlowThread.ReactionService"
+			]
+		},
+		"glowthreadreport": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadReport",
+			"services": [
+				"GlowThread.ReportService",
+				"GlowThread.SettingsService"
+			]
+		},
+		"glowthreaddelete": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadDelete",
+			"services": [
+				"GlowThread.ModerationService"
+			]
+		},
+		"glowthreadmoderate": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadModerate",
+			"services": [
+				"GlowThread.ModerationService"
+			]
+		},
+		"glowthreadpage": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadPage",
+			"services": [
+				"GlowThread.PageStateService"
+			]
+		},
+		"glowthreadfiltertest": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadFilterTest",
+			"services": [
+				"GlowThread.WordFilter",
+				"GlowThread.TextProcessor",
+				"GlowThread.WriteGuard"
+			]
+		},
+		"glowthreadsettings": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Api\\ApiGlowThreadSettings",
+			"services": [
+				"GlowThread.SettingsService"
+			]
+		}
+	},
+	"RestRoutes": [
+		{
+			"path": "/glowthread/v1/page/{pageId}/comments",
+			"method": "GET",
+			"factory": "MediaWiki\\Extension\\GlowThread\\Rest\\ListHandler::factory",
+			"services": [
+				"GlowThread.Config",
+				"GlowThread.CdnPurger",
+				"GlowThread.ListCache",
+				"GlowThread.PageEligibility",
+				"TitleFormatter"
+			]
+		},
+		{
+			"path": "/glowthread/v1/page/{pageId}/floor/{seq}",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\FloorHandler",
+			"services": [
+				"GlowThread.CommentQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/comment/{id}",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\CommentHandler",
+			"services": [
+				"GlowThread.CommentQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/comment/{id}/thread",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\ThreadHandler",
+			"services": [
+				"GlowThread.CommentQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/comment/{id}/replies",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\RepliesHandler",
+			"services": [
+				"GlowThread.CommentQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/moderation/queue",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\QueueHandler",
+			"services": [
+				"GlowThread.ModerationQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/moderation/user/{name}",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\UserHistoryHandler",
+			"services": [
+				"GlowThread.ModerationQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/moderation/page/{pageId}",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\PageHistoryHandler",
+			"services": [
+				"GlowThread.ModerationQueryService"
+			]
+		},
+		{
+			"path": "/glowthread/v1/settings",
+			"method": "GET",
+			"class": "MediaWiki\\Extension\\GlowThread\\Rest\\SettingsHandler",
+			"services": [
+				"GlowThread.SettingsService",
+				"GlowThread.WordFilter",
+				"GlowThread.RateLimitErrors"
+			]
+		}
+	],
+	"SpecialPages": {
+		"GlowThread": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Special\\SpecialGlowThread",
+			"services": [
+				"GlowThread.Config"
+			]
+		},
+		"GlowThreadLink": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Special\\SpecialGlowThreadLink",
+			"services": [
+				"GlowThread.PostStore",
+				"GlowThread.CommentQueryService",
+				"TitleFactory"
+			]
+		}
+	},
+	"Hooks": {
+		"LoadExtensionSchemaUpdates": "schema",
+		"BeforePageDisplay": "page",
+		"OutputPageParserOutput": "page",
+		"ArticleViewFooter": "page",
+		"DifferenceEngineShowDiffPage": "page",
+		"PageDeleteComplete": "lifecycle",
+		"PageUndelete": "lifecycle",
+		"PageUndeleteComplete": "lifecycle",
+		"PageMoveComplete": "lifecycle",
+		"BlockIpComplete": "lifecycle",
+		"UnblockUserComplete": "lifecycle",
+		"RenameUserComplete": "lifecycle",
+		"UserMergeAccountFields": "usermerge",
+		"MergeAccountFromTo": "usermerge",
+		"GlowThreadPostSaved": [
+			"checkuser",
+			"echo"
+		],
+		"GlowThreadPostApproved": "echo",
+		"GlowThreadPostModerated": "echo",
+		"GlowThreadReportFiled": "checkuser",
+		"CheckUserInsertLogEventRow": "checkuser",
+		"CheckUserInsertPrivateEventRow": "checkuser",
+		"UserGetReservedNames": "reservedNames",
+		"UserGetRights": "logVisibility",
+		"ChangesListSpecialPageQuery": "logVisibility",
+		"ApiQueryBaseBeforeQuery": "logVisibility",
+		"WatchedItemQueryServiceExtensions": "logVisibility",
+		"BeforeCreateEchoEvent": "echoSetup",
+		"EchoGetBundleRules": "echoSetup",
+		"ApiMain::moduleManager": "compat",
+		"SpecialPage_initList": "compat"
+	},
+	"HookHandlers": {
+		"schema": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Hooks\\SchemaHooks"
+		},
+		"page": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Hooks\\PageDisplayHooks",
+			"services": [
+				"GlowThread.PageEligibility",
+				"GlowThread.PageStateStore",
+				"GlowThread.CdnPurger",
+				"GlowThread.Config"
+			]
+		},
+		"lifecycle": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Hooks\\PageLifecycleHooks",
+			"services": [
+				"GlowThread.PageLifecycleService",
+				"GlowThread.LogAuthorLookup",
+				"GlowThread.ModerationLogger",
+				"ConnectionProvider"
+			]
+		},
+		"usermerge": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Hooks\\UserMergeHooks",
+			"services": [
+				"ConnectionProvider",
+				"GlowThread.PageLifecycleService",
+				"GlowThread.PostStore"
+			]
+		},
+		"echo": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Echo\\NotificationHooks",
+			"services": [
+				"GlowThread.SettingsService",
+				"GlowThread.PostStore",
+				"GlowThread.PageStateStore",
+				"UserFactory",
+				"BlockManager",
+				"TitleFactory"
+			]
+		},
+		"echoSetup": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Echo\\EchoSetupHooks",
+			"services": [
+				"GlowThread.Config"
+			]
+		},
+		"checkuser": {
+			"class": "MediaWiki\\Extension\\GlowThread\\CheckUser\\CheckUserHooks"
+		},
+		"reservedNames": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Hooks\\ReservedNamesHooks"
+		},
+		"logVisibility": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Hooks\\LogVisibilityHooks",
+			"services": [
+				"GlowThread.SettingsService",
+				"MainConfig",
+				"ConnectionProvider"
+			]
+		},
+		"compat": {
+			"class": "MediaWiki\\Extension\\GlowThread\\Compat\\CompatHooks",
+			"services": [
+				"GlowThread.Config"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "GlowThread"
+	},
+	"ResourceModules": {
+		"ext.glowThread.init": {
+			"packageFiles": [
+				"resources/init/index.js"
+			]
+		},
+		"ext.glowThread.reserve": {
+			"styles": [
+				"resources/init/reserve.css"
+			]
+		},
+		"ext.glowThread.app": {
+			"class": "MediaWiki\\Extension\\GlowThread\\ResourceLoader\\UiMessagesModule",
+			"uiMessagesFile": "i18n/ui/en.json",
+			"uiMessagesExcludePrefix": "glowthread-ui-admin-",
+			"packageFiles": [
+				"resources/dist/app.js"
+			],
+			"styles": [
+				"resources/dist/app.css"
+			],
+			"dependencies": [
+				"mediawiki.api",
+				"mediawiki.user",
+				"mediawiki.util",
+				"mediawiki.language"
+			]
+		},
+		"ext.glowThread.app.menu": {
+			"packageFiles": [
+				"resources/dist/app-menu.js"
+			],
+			"dependencies": [
+				"ext.glowThread.app"
+			]
+		},
+		"ext.glowThread.app.extras": {
+			"packageFiles": [
+				"resources/dist/app-extras.js"
+			],
+			"dependencies": [
+				"ext.glowThread.app",
+				"ext.glowThread.app.menu"
+			]
+		},
+		"ext.glowThread.admin": {
+			"class": "MediaWiki\\Extension\\GlowThread\\ResourceLoader\\UiMessagesModule",
+			"uiMessagesFile": "i18n/ui/en.json",
+			"packageFiles": [
+				"resources/dist/admin.js"
+			],
+			"styles": [
+				"resources/dist/admin.css"
+			],
+			"dependencies": [
+				"mediawiki.api",
+				"mediawiki.user",
+				"mediawiki.util",
+				"mediawiki.language"
+			]
+		}
+	},
+	"config": {
+		"GlowThreadNamespaces": {
+			"description": "Namespaces where comments appear, as a map of namespace ID to true or false. Talk namespaces, special pages and the main page are always excluded.",
+			"value": {
+				"0": true
+			},
+			"merge_strategy": "array_plus"
+		},
+		"GlowThreadMaxLength": {
+			"description": "Maximum comment length in Unicode code points. On-wiki setting maxLength. Default 1000 when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadMaxMentions": {
+			"description": "Maximum number of distinct existing users one comment may mention. On-wiki setting maxMentions. Default 5 when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadPageSize": {
+			"description": "Top-level comments per list page.",
+			"value": 20
+		},
+		"GlowThreadReplyPreview": {
+			"description": "Replies shown under each comment before 'more replies'.",
+			"value": 3
+		},
+		"GlowThreadPopularCount": {
+			"description": "Size of the popular block. 0 turns it off.",
+			"value": 3
+		},
+		"GlowThreadPopularMinLikes": {
+			"description": "Minimum likes for a comment to enter the popular block.",
+			"value": 2
+		},
+		"GlowThreadHotHalfLife": {
+			"description": "Half-life in days of the like score used by hot sort and the popular block.",
+			"value": 90
+		},
+		"GlowThreadCdnMaxAge": {
+			"description": "s-maxage in seconds of the anonymous first-page list responses. 0 makes them private. Used only when $wgUseCdn is on.",
+			"value": 300
+		},
+		"GlowThreadPublicLog": {
+			"description": "Show GlowThread's log entries (moderation actions and settings changes, and FlowThread's comments entries while GlowThread shows them) to everyone in Special:Log, Special:RecentChanges, watchlists and the API. When off, only users with glowthread-moderate, glowthread-erase or glowthread-configure see them, and entries logged meanwhile stay out of RecentChanges, so they send no watchlist emails or notifications. CheckUser records them either way. On-wiki setting publicLog. Default true when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadTheme": {
+			"description": "Colour scheme of the comment section and the moderation hub: auto (follow the skin and the reader's system setting), night or day (always dark or always light, through the class ext-glowthread-night or ext-glowthread-day on the html element). Other values count as auto.",
+			"value": "auto"
+		},
+		"GlowThreadLegacyCompat": {
+			"description": "For wikis that used FlowThread: answer FlowThread's API (action=flowthread, type=list and type=listall) read-only, and keep showing the notifications and the comments log entries FlowThread stored. Off by default.",
+			"value": false
+		},
+		"GlowThreadDuplicateWindow": {
+			"description": "Seconds within which the same user may not post the same text on the same page again. On-wiki setting duplicateWindow. Default 600 when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadNewAccountHours": {
+			"description": "New-account gate: accounts younger than this many hours that also have fewer than GlowThreadNewAccountApproved visible comments are held. On-wiki setting newAccountHours. Default 24 when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadNewAccountApproved": {
+			"description": "New-account gate: number of visible comments that lets a young account skip the gate. On-wiki setting newAccountApproved. Default 1 when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadAutoHoldReporters": {
+			"description": "Hold a visible comment once this many distinct eligible users have open reports on it. Eligible: not blocked from the page and would pass the new-account gate. Pinned comments and comments by users with glowthread-moderate or glowthread-trusted are never held this way. 0 turns it off. On-wiki setting autoHoldReporters. Default 3 when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadMaxHeldPerUser": {
+			"description": "Most comments one author may have waiting for review. A comment that would be held beyond it is refused (error toomanyheld). 0 means no cap.",
+			"value": 3
+		},
+		"GlowThreadReportReasons": {
+			"description": "Report reasons offered to readers. On-wiki setting reportReasons. Default all six (spam, abuse, offtopic, spoiler, misinfo, other) when null. Setting it in LocalSettings locks the on-wiki setting to that value.",
+			"value": null
+		},
+		"GlowThreadOnWikiSettings": {
+			"description": "Which settings may be changed on-wiki through Special:GlowThread/settings. Map of setting name to true (editable) or false (locked to the LocalSettings value or its default). A setting whose variable LocalSettings sets is locked either way.",
+			"value": {
+				"maxLength": true,
+				"maxMentions": true,
+				"duplicateWindow": true,
+				"newAccountHours": true,
+				"newAccountApproved": true,
+				"autoHoldReporters": true,
+				"reportReasons": true,
+				"publicLog": true
+			},
+			"merge_strategy": "array_plus"
+		}
+	},
+	"manifest_version": 2
+}

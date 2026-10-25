@@ -1,0 +1,10 @@
+# Supply-chain hardening:
+# only versions published at least 7 days ago, no trust downgrades.
+allowBuilds:
+  esbuild: false
+  vue-demi: false
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade
+# reka-ui 2.11.0 (2026-10-05) is the version the apps were built and tested with.
+minimumReleaseAgeExclude:
+  - reka-ui@2.11.0

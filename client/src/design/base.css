@@ -1,0 +1,262 @@
+/*
+ * Base rules, layer "base": the scope roots stand in for <html> and <body>, plus the
+ * browser surfaces nobody draws (selection, caret, focus ring, scrollbars, numerals).
+ */
+.gt-scope {
+  /* Every inherited property, so nothing the skin sets on <body> or the content area
+     flows into the app (the scoped reset reverts inherited properties to "inherit"). */
+  font-family: var(--gt-v-font-family);
+  font-size: var(--gt-v-font-size-body);
+  font-weight: 400;
+  font-style: normal;
+  font-variant: normal;
+  font-stretch: normal;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-size-adjust: none;
+  line-height: var(--gt-v-line-height-body);
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-align: start;
+  text-indent: 0;
+  text-transform: none;
+  text-decoration: none;
+  text-shadow: none;
+  text-rendering: auto;
+  text-underline-position: auto;
+  text-decoration-skip-ink: auto;
+  /* Space between CJK and Latin text where the browser supports it (Chrome 140+). */
+  text-autospace: normal;
+  text-spacing-trim: normal;
+  white-space: normal;
+  word-break: normal;
+  line-break: auto;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  tab-size: 4;
+  quotes: auto;
+  cursor: auto;
+  visibility: visible;
+  pointer-events: auto;
+  interpolate-size: numeric-only;
+  color: var(--gt-v-color-fg);
+  color-scheme: var(--gt-v-color-scheme);
+  accent-color: var(--gt-v-color-accent-bg);
+  -webkit-font-smoothing: auto;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gt-scope ::selection {
+  background-color: var(--gt-v-color-accent-subtle);
+  color: var(--gt-v-color-fg);
+}
+
+.gt-scope textarea,
+.gt-scope input {
+  caret-color: var(--gt-v-color-accent-text);
+}
+
+.gt-scope ::placeholder {
+  color: var(--gt-v-color-fg-subtle);
+  opacity: 1;
+}
+
+/* One focus ring for every control: 2px of the accent colour by default, 3:1 on light and dark.
+   Browsers without :focus-visible (Safari before 15.4) drop both rules and keep
+   their own focus ring. */
+.gt-scope :focus:not(:focus-visible) {
+  outline: none;
+}
+.gt-scope :focus-visible {
+  outline: var(--gt-v-focus-ring-width) solid var(--gt-v-color-focus-ring);
+  outline-offset: var(--gt-v-focus-ring-offset);
+}
+
+.gt-scope button,
+.gt-scope [role="button"],
+.gt-scope [role="menuitem"],
+.gt-scope [role="tab"],
+.gt-scope [role="option"],
+.gt-scope [role="checkbox"],
+.gt-scope [role="radio"] {
+  cursor: pointer;
+}
+.gt-scope button:disabled,
+.gt-scope [aria-disabled="true"],
+.gt-scope [data-disabled] {
+  cursor: default;
+}
+
+/* Scrollable panels (sheets, menus): thin, neutral scrollbars. */
+.gt-scope .gt-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gt-v-color-border-control) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.gt-scope .gt-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.gt-scope .gt-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--gt-v-color-border-control);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background-clip: padding-box;
+}
+.gt-scope .gt-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Screen-reader-only text. */
+.gt-scope .gt-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Touch targets: on touch screens a control marked gt-hit answers taps in at least
+   44 x 44 px, centred on it, without growing the layout. */
+@media (pointer: coarse) {
+  .gt-scope .gt-hit {
+    position: relative;
+  }
+  .gt-scope .gt-hit::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    min-width: 44px;
+    min-height: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Numbers that change or line up (counts, floors, times) keep their width. */
+.gt-scope .gt-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Generated avatars (ui/avatar): hue from the name, tone from the tokens, unless the site sets
+   one colour (tokens.css resolves both on the avatar, where the hue is). */
+.gt-scope .gt-avatar[style] {
+  background-color: var(--gt-v-avatar-bg);
+  color: var(--gt-v-avatar-fg);
+}
+
+/* Lucide icons draw with the token's stroke width (the CSS value wins over their attribute). */
+.gt-scope .lucide {
+  stroke-width: var(--gt-v-icon-stroke);
+}
+
+/* A comment row (not its replies) takes the comment-bg token, so a site can tint some rows.
+   The permalink highlight (motion.css) paints over it. */
+.gt-scope .gt-comment-row {
+  background-color: var(--gt-v-comment-bg);
+}
+
+/* Toasts sit above the phone skins' bottom bars (Citizen puts its header there): the toast
+   offset is 48 px larger on phones (tokens.css). */
+.gt-scope .gt-toaster {
+  bottom: var(--gt-v-toast-offset);
+  bottom: calc(var(--gt-v-toast-offset) + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 640px) {
+  .gt-scope .gt-toaster {
+    bottom: var(--gt-v-toast-offset);
+  }
+}
+
+/* Long comments fold after 6 lines (CommentBody), with Show more below. */
+.gt-scope .gt-fold {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+}
+
+/* Elements that receive focus from the app (the section heading after a deletion, a
+   linked comment) show no ring: they are not controls. */
+.gt-scope [tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* A small hint above an element on hover and keyboard focus (the exact time of a comment).
+   CSS only; the text comes from data-tip and screen readers get it from the element. */
+.gt-scope .gt-tip {
+  position: relative;
+}
+.gt-scope .gt-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  z-index: 10;
+  padding: 4px 8px;
+  border-radius: var(--gt-v-radius-control);
+  background-color: var(--gt-v-color-fg);
+  color: var(--gt-v-color-surface);
+  box-shadow: var(--gt-v-shadow-overlay);
+  font-size: var(--gt-v-font-size-meta);
+  line-height: var(--gt-v-line-height-meta);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--gt-v-duration-fast) var(--gt-v-ease-out);
+}
+.gt-scope .gt-tip:focus-visible::after {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .gt-scope .gt-tip:hover::after {
+    opacity: 1;
+    transition-delay: 300ms;
+  }
+}
+
+/* Bars that stick to the bottom on phones sit above Citizen's bottom bar (72px). Citizen
+   also floats its page actions (⋯, 40px wide) at the bottom right: keep clear of them. */
+@media (max-width: 639px) {
+  .skin-citizen .gt-scope .gt-sticky-bar {
+    margin-right: 48px;
+  }
+}
+
+/* Icons that point along the reading direction (chevrons and arrows to go on, the reply
+   corner, send) face the other way in a right-to-left interface. ResourceLoader flips the
+   stylesheet there (CSSJanus) but cannot reach inside an SVG. */
+:root[dir="rtl"] .gt-scope .gt-flip-rtl {
+  transform: scaleX(-1);
+}
+
+/* Forced colours (Windows High Contrast) drop backgrounds and shadows, so the states they
+   carry get system colours: the @mention or suggestion option picked with the arrow keys
+   (focus stays in the field), the menu item under the pointer, and the selected tab. Keyboard
+   focus already shows the outline. */
+@media (forced-colors: active) {
+  .gt-scope [role="option"][aria-selected="true"],
+  .gt-scope [role="menuitem"][data-highlighted],
+  .gt-scope [role="menuitemradio"][data-highlighted],
+  .gt-scope [role="menuitemcheckbox"][data-highlighted] {
+    outline: var(--gt-v-focus-ring-width) solid Highlight;
+    outline-offset: calc(var(--gt-v-focus-ring-width) * -1);
+  }
+  /* aria-selected as well, to outweigh the underline utility. */
+  .gt-scope [role="tab"][data-state="active"][aria-selected="true"]::before {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+}

@@ -1,0 +1,7 @@
+# Supply-chain hardening:
+# only versions published at least 7 days ago, no trust downgrades.
+allowBuilds:
+  esbuild: false
+  vue-demi: false
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade

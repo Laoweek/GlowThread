@@ -1,0 +1,154 @@
+/* Moderation hub stylesheet: the design system plus the utilities this app uses.
+   source(none) keeps Tailwind from scanning the comment section into this bundle. */
+@import "../design/index.css";
+@import "tailwindcss/utilities.css" layer(utilities) prefix(gt) source(none);
+@source "../ui";
+@source "../shared";
+@source "./";
+
+@layer components {
+  /* Keyboard hints next to actions. Touch screens have no keyboard to hint at. */
+  .gt-scope .gt-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25em;
+    height: 1.25em;
+    padding: 0 0.25em;
+    border: var(--gt-v-border-width) solid var(--gt-v-color-border);
+    border-radius: var(--gt-v-radius-mark);
+    color: var(--gt-v-color-fg-muted);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: var(--gt-v-font-weight-medium);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  @media (pointer: coarse) {
+    /* Doubled class: wins over display utilities on the same element. */
+    .gt-scope .gt-kbd-hint.gt-kbd-hint {
+      display: none;
+    }
+  }
+
+  /* The hub lives inside the article body, where site CSS may set paragraph margins with
+     !important (for example `.vector-body p { margin: 1em 0 !important }`). The hub's own text blocks are divs; the
+     only paragraphs are comment texts (CommentBody), which have no margins by design. */
+  .gt-scope .gt-admin p {
+    margin: 0 !important;
+  }
+
+  /* Queue items off screen skip layout and paint: with hundreds loaded, removing one would
+     otherwise lay out every item below it again. The auto size
+     remembers each item's real height. Only where that size exists (Chrome 95, Safari 17,
+     Firefox 107): Chrome 85 to 89 hid the headings of skipped items from screen readers. */
+  @supports (contain-intrinsic-size: auto 160px) {
+    .gt-scope .gt-q-item {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 160px;
+    }
+  }
+  /* The item clips what is drawn outside it (paint containment): the exact time in its
+     header opens downward. */
+  .gt-scope .gt-q-item header .gt-tip::after {
+    top: calc(100% + 6px);
+    bottom: auto;
+  }
+
+  /* Queue item checkboxes (ItemSelect): native, drawn like ui/checkbox, the mark per theme. */
+  .gt-scope .gt-check {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    /* Above the label's touch area (gt-hit), so a tap on the box reaches the box itself. */
+    position: relative;
+    z-index: 1;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    border: var(--gt-v-border-width) solid var(--gt-v-color-border-control);
+    border-radius: var(--gt-v-radius-mark);
+    background: var(--gt-v-color-surface) center / 14px no-repeat;
+    cursor: pointer;
+    transition: background-color var(--gt-v-duration-fast) var(--gt-v-ease-out);
+  }
+  .gt-scope .gt-check:checked {
+    border-color: var(--gt-v-color-accent-bg);
+    background-color: var(--gt-v-color-accent-bg);
+  }
+  /* The check mark: an SVG beside the box, drawn in on-accent (the token, in every mode), like
+     the reader's checkboxes. A data URI could not follow the token. */
+  .gt-scope .gt-check-mark {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--gt-v-color-on-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .gt-scope .gt-check:checked + .gt-check-mark {
+    display: block;
+  }
+  /* High contrast modes replace the colours the box is drawn with: use the system box. */
+  @media (forced-colors: active) {
+    .gt-scope .gt-check {
+      -webkit-appearance: checkbox;
+      appearance: auto;
+    }
+    .gt-scope .gt-check:checked + .gt-check-mark {
+      display: none;
+    }
+  }
+
+  /* Text links: body colour with a quiet themed underline. The accent stays for focus,
+     selection and the tab underline. */
+  .gt-scope .gt-link {
+    color: var(--gt-v-color-fg);
+    text-decoration-line: underline;
+    text-decoration-color: var(--gt-v-color-border-control);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .gt-scope .gt-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* The item j and k are on. Not on touch screens, where a tinted first item looks pressed. */
+  @media (pointer: fine) {
+    .gt-scope .gt-q-item.gt-q-focused {
+      background-color: var(--gt-v-color-surface-subtle);
+    }
+  }
+
+  /* A selected item (marked by ItemSelect, which owns the selection state). */
+  .gt-scope .gt-q-item[data-selected] {
+    background-color: var(--gt-v-color-highlight);
+  }
+
+  /* While the bulk bar is shown, toasts sit 64 px higher, above it. */
+  .gt-scope.gt-toasts-raised .gt-toaster {
+    bottom: calc(var(--gt-v-toast-offset) + 64px);
+    bottom: calc(var(--gt-v-toast-offset) + 64px + env(safe-area-inset-bottom, 0px));
+  }
+  @media (min-width: 640px) {
+    .gt-scope.gt-toasts-raised .gt-toaster {
+      bottom: calc(var(--gt-v-toast-offset) + 64px);
+    }
+  }
+
+  /* The word-filter editor: line numbers beside a textarea that scrolls with them. */
+  .gt-scope .gt-code {
+    font-family: var(--gt-v-font-family-mono);
+    font-size: var(--gt-v-font-size-code);
+    line-height: 1.6;
+    tab-size: 4;
+  }
+}

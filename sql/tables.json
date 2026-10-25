@@ -1,0 +1,376 @@
+[
+	{
+		"name": "glowthread_post",
+		"comment": "One row per comment. Rows are never hard-deleted: erase blanks the text and keeps the row as a tombstone.",
+		"columns": [
+			{
+				"name": "gtp_id",
+				"comment": "Primary key, also the public comment ID",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "autoincrement": true }
+			},
+			{
+				"name": "gtp_page",
+				"comment": "page.page_id of the article the comment is under",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtp_actor",
+				"comment": "actor.actor_id of the author (IP actors for legacy anonymous comments)",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtp_parent",
+				"comment": "Display parent: gtp_id of the comment this one is shown under (depth - 1), null for top-level comments",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "gtp_reply_to",
+				"comment": "gtp_id of the comment the author replied to. Equals gtp_parent except for replies to depth-2 comments, which are shown at depth 2",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "gtp_thread",
+				"comment": "gtp_id of the top-level ancestor, null for top-level comments",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "gtp_depth",
+				"comment": "Display depth: 0 top-level, 1 reply, 2 reply to a reply (deeper replies are shown at 2)",
+				"type": "smallint",
+				"options": { "unsigned": true, "notnull": true, "default": 0 }
+			},
+			{
+				"name": "gtp_seq",
+				"comment": "Per-page floor number, assigned from glowthread_page.gtpg_seq, never reused",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtp_text",
+				"comment": "Plain-text source (UTF-8, NFC). Rendered on read, never stored as HTML. Empty for erased comments",
+				"type": "blob",
+				"options": { "notnull": true, "length": 65530 }
+			},
+			{
+				"name": "gtp_created",
+				"comment": "Creation timestamp",
+				"type": "mwtimestamp",
+				"options": { "notnull": true }
+			},
+			{
+				"name": "gtp_edited",
+				"comment": "Last edit timestamp, null if never edited",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			},
+			{
+				"name": "gtp_status",
+				"comment": "visible, held, deleted or erased",
+				"type": "binary",
+				"options": { "notnull": true, "length": 16, "default": "visible" }
+			},
+			{
+				"name": "gtp_hold_reason",
+				"comment": "Comma-separated hold reasons (filter, filter-error, spamblacklist, newaccount, reports, parentheld), null when never held",
+				"type": "binary",
+				"options": { "notnull": false, "length": 255 }
+			},
+			{
+				"name": "gtp_hold_detail",
+				"comment": "JSON with what held the comment, {\"filter\": [ {\"line\", \"rule\", \"type\"} ]} for word-filter matches, null when there is nothing to record",
+				"type": "blob",
+				"options": { "notnull": false, "length": 65530 }
+			},
+			{
+				"name": "gtp_status_actor",
+				"comment": "actor.actor_id of whoever last changed the status (moderator or author), null if never changed",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "gtp_status_timestamp",
+				"comment": "When the status last changed",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			},
+			{
+				"name": "gtp_like_count",
+				"comment": "Number of likes, updated with relative SQL",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "default": 0 }
+			},
+			{
+				"name": "gtp_reply_count",
+				"comment": "Number of visible direct (display) children, updated with relative SQL",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "default": 0 }
+			},
+			{
+				"name": "gtp_open_report_count",
+				"comment": "Number of unresolved reports, updated with relative SQL",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "default": 0 }
+			},
+			{
+				"name": "gtp_pinned",
+				"comment": "When the comment was pinned, null if not pinned",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			},
+			{
+				"name": "gtp_legacy_id",
+				"comment": "FlowThread ID as 22 lowercase hex digits, null for comments made in GlowThread",
+				"type": "binary",
+				"options": { "notnull": false, "length": 32 }
+			}
+		],
+		"indexes": [
+			{
+				"name": "gtp_page_status_depth_created",
+				"comment": "Page listing by status and time (new sort, hot candidates, counts)",
+				"columns": [ "gtp_page", "gtp_status", "gtp_depth", "gtp_created" ],
+				"unique": false
+			},
+			{
+				"name": "gtp_page_seq",
+				"comment": "Floor numbers are unique per page, and permalinks resolve by page and floor",
+				"columns": [ "gtp_page", "gtp_seq" ],
+				"unique": true
+			},
+			{
+				"name": "gtp_thread_created",
+				"comment": "Replies by thread",
+				"columns": [ "gtp_thread", "gtp_created" ],
+				"unique": false
+			},
+			{
+				"name": "gtp_parent_created",
+				"comment": "Replies by display parent",
+				"columns": [ "gtp_parent", "gtp_created" ],
+				"unique": false
+			},
+			{
+				"name": "gtp_actor_created",
+				"comment": "User history, duplicate check and new-account gate",
+				"columns": [ "gtp_actor", "gtp_created" ],
+				"unique": false
+			},
+			{
+				"name": "gtp_status_id",
+				"comment": "Moderation queue tabs held, deleted",
+				"columns": [ "gtp_status", "gtp_id" ],
+				"unique": false
+			},
+			{
+				"name": "gtp_open_report_count_id",
+				"comment": "Moderation queue tab reported, most reported first",
+				"columns": [ "gtp_open_report_count", "gtp_id" ],
+				"unique": false
+			},
+			{
+				"name": "gtp_legacy_id",
+				"comment": "Import idempotency and legacy permalinks",
+				"columns": [ "gtp_legacy_id" ],
+				"unique": true
+			}
+		],
+		"pk": [ "gtp_id" ]
+	},
+	{
+		"name": "glowthread_reaction",
+		"comment": "Likes now, other reaction types later. One row per post, actor and type",
+		"columns": [
+			{
+				"name": "gtr_post",
+				"comment": "glowthread_post.gtp_id",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtr_actor",
+				"comment": "actor.actor_id of the reacting user",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtr_type",
+				"comment": "Reaction type, currently only like",
+				"type": "binary",
+				"options": { "notnull": true, "length": 16, "default": "like" }
+			},
+			{
+				"name": "gtr_timestamp",
+				"comment": "When the reaction was made, null for imported likes",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			}
+		],
+		"indexes": [
+			{
+				"name": "gtr_actor_post",
+				"comment": "Reactions by user",
+				"columns": [ "gtr_actor", "gtr_post" ],
+				"unique": false
+			}
+		],
+		"pk": [ "gtr_post", "gtr_actor", "gtr_type" ]
+	},
+	{
+		"name": "glowthread_report",
+		"comment": "Reports against comments. One report per user and comment",
+		"columns": [
+			{
+				"name": "gtrp_id",
+				"comment": "Primary key",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "autoincrement": true }
+			},
+			{
+				"name": "gtrp_post",
+				"comment": "glowthread_post.gtp_id",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtrp_actor",
+				"comment": "actor.actor_id of the reporter",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtrp_reason",
+				"comment": "spam, abuse, offtopic, spoiler, misinfo, other, or legacy for imported reports",
+				"type": "binary",
+				"options": { "notnull": true, "length": 16 }
+			},
+			{
+				"name": "gtrp_note",
+				"comment": "Optional free-text note from the reporter",
+				"type": "blob",
+				"options": { "notnull": false, "length": 65530 }
+			},
+			{
+				"name": "gtrp_created",
+				"comment": "When the report was filed, null for imported reports",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			},
+			{
+				"name": "gtrp_resolved_actor",
+				"comment": "actor.actor_id of the moderator who resolved the report, null while open",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "gtrp_resolved_at",
+				"comment": "When the report was resolved, null while open",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			},
+			{
+				"name": "gtrp_outcome",
+				"comment": "upheld (comment removed or held) or dismissed, null while open",
+				"type": "binary",
+				"options": { "notnull": false, "length": 16 }
+			}
+		],
+		"indexes": [
+			{
+				"name": "gtrp_post_actor",
+				"comment": "One report per user and comment, and open reports by comment",
+				"columns": [ "gtrp_post", "gtrp_actor" ],
+				"unique": true
+			},
+			{
+				"name": "gtrp_actor_id",
+				"comment": "Reports filed by a user",
+				"columns": [ "gtrp_actor", "gtrp_id" ],
+				"unique": false
+			}
+		],
+		"pk": [ "gtrp_id" ]
+	},
+	{
+		"name": "glowthread_page",
+		"comment": "Per-page comment state and floor counter",
+		"columns": [
+			{
+				"name": "gtpg_page",
+				"comment": "page.page_id",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gtpg_state",
+				"comment": "open, locked or disabled",
+				"type": "binary",
+				"options": { "notnull": true, "length": 16, "default": "open" }
+			},
+			{
+				"name": "gtpg_actor",
+				"comment": "actor.actor_id of whoever last changed the state, null if never changed",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "gtpg_timestamp",
+				"comment": "When the state last changed",
+				"type": "mwtimestamp",
+				"options": { "notnull": false }
+			},
+			{
+				"name": "gtpg_seq",
+				"comment": "Last floor number handed out on this page",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "default": 0 }
+			}
+		],
+		"indexes": [
+			{
+				"name": "gtpg_state",
+				"comment": "Pages by state, for the settings screen",
+				"columns": [ "gtpg_state" ],
+				"unique": false
+			}
+		],
+		"pk": [ "gtpg_page" ]
+	},
+	{
+		"name": "glowthread_setting",
+		"comment": "On-wiki overrides of GlowThread policy settings",
+		"columns": [
+			{
+				"name": "gts_name",
+				"comment": "Setting key",
+				"type": "binary",
+				"options": { "notnull": true, "length": 64 }
+			},
+			{
+				"name": "gts_value",
+				"comment": "JSON-encoded value",
+				"type": "blob",
+				"options": { "notnull": true, "length": 65530 }
+			},
+			{
+				"name": "gts_actor",
+				"comment": "actor.actor_id of whoever last changed it",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "gts_timestamp",
+				"comment": "When it was last changed",
+				"type": "mwtimestamp",
+				"options": { "notnull": true }
+			}
+		],
+		"indexes": [],
+		"pk": [ "gts_name" ]
+	}
+]

@@ -1,0 +1,12 @@
+This page holds multilingual test comments for GlowThread. They check how the comment system handles many scripts and writing directions:
+
+* Chinese (simplified and traditional), Japanese and Korean
+* Arabic and Hebrew, which are written right to left
+* Text that mixes left-to-right and right-to-left runs
+* Emoji sequences joined with zero-width joiners, and skin tone modifiers
+* Stacked accents in Vietnamese, and combining marks in Devanagari
+* A very long unbroken string, and a comment near the length limit
+
+The comments are made-up test data written for this wiki. Each one says what it tests. Please keep this page for that purpose.
+
+Back to the [[Main Page]].

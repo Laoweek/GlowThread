@@ -1,0 +1,716 @@
+varnishtest "GlowThread dev cache policy (dev/varnish/default.vcl) against a fake backend"
+
+# Run with dev/varnish/test.sh, which puts default.vcl in place of @VCL@ and points its
+# backend at s1. Each rxreq below is one request that reached MediaWiki, in order.
+server s1 {
+	# Page views
+	rxreq
+	expect req.url == "/wiki/Page"
+	expect req.http.x-subdomain == <undef>
+	txresp -hdr "Cache-Control: s-maxage=18000, must-revalidate, max-age=0" -hdr "Vary: Accept-Encoding,Cookie" -body "desktop"
+	rxreq
+	expect req.http.Cookie == "glowthread_gt__session=probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "logged in"
+	rxreq
+	expect req.http.Cookie == "glowthread_gt_Token=probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "logged in"
+	rxreq
+	expect req.http.Authorization == "Bearer probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "oauth"
+	rxreq
+	expect req.url == "/api.php?action=query&meta=siteinfo"
+	txresp -hdr "Cache-Control: s-maxage=300, max-age=300, public" -body "api"
+	rxreq
+	expect req.url == "/rest.php/v1/page/Page"
+	txresp -hdr "Cache-Control: s-maxage=300, public" -body "rest"
+	rxreq
+	expect req.method == "POST"
+	txresp -body "posted"
+	rxreq
+	expect req.url == "/wiki/Page"
+	expect req.http.x-subdomain == "m"
+	txresp -hdr "Cache-Control: s-maxage=18000, must-revalidate, max-age=0" -hdr "Vary: Accept-Encoding,Cookie" -body "mobile"
+
+	# GlowThread carve-out
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/1/comments?sort=new"
+	expect req.http.Cookie == <undef>
+	expect req.http.x-subdomain == <undef>
+	expect req.http.x-glowthread-url == <undef>
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 1 new"
+	rxreq
+	expect req.http.Cookie == "glowthread_gt__session=probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 1 new, logged in"
+	rxreq
+	expect req.http.Cookie == "_ga=probe; glowthread_gt_Token=probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 1 new, token"
+	rxreq
+	expect req.http.Authorization == "Bearer probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 1 new, oauth"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/2/comments?sort=hot"
+	txresp -hdr "Cache-Control: private, max-age=60" -body "page 2, private"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/2/comments?sort=hot"
+	txresp -hdr "Cache-Control: private, max-age=60" -body "page 2, private"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/999/comments?sort=hot"
+	txresp -status 404 -body "no page"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/999/comments?sort=hot"
+	txresp -status 404 -body "no page"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/3/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -hdr "Set-Cookie: probe=1" -body "page 3, cookie"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/3/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -hdr "Set-Cookie: probe=1" -body "page 3, cookie"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/4/comments?sort=hot"
+	txresp -hdr "Cache-Control: max-age=60" -body "page 4, max-age only"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/4/comments?sort=hot"
+	txresp -hdr "Cache-Control: max-age=60" -body "page 4, max-age only"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/../../api.php?action=query"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "api through dot segments"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/%2e%2e/%2e%2e/api.php?action=query"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "api through encoded dot segments"
+
+	# Canonical list URL
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 5 hot"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=new"
+	expect req.http.x-glowthread-url == <undef>
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 5 new"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/6/comments?sort=new"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 6 new"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/9/comments?sort=hot"
+	expect req.http.x-restbase-compat == <undef>
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -hdr "Vary: x-restbase-compat, Accept-Encoding" -body "page 9"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=hot"
+	expect req.http.host == "localhost:8250"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "other port"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=hot&junk=1"
+	expect req.http.host == "127.0.0.1:8150"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "other host"
+	rxreq
+	expect req.http.host == "localhost:9999"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "other host"
+	rxreq
+	expect req.http.host == "localhost"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "other host"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=hot&limit=5"
+	expect req.http.Cookie == "glowthread_gt__session=probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 5, logged in"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=hot&limit=5"
+	expect req.http.Authorization == "Bearer probe"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 5, oauth"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=hot&cursor=abc"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 5, later page"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?cursor=&cursor=abc&sort=new"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 5, last cursor"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?cursor=abc&cursorx=&sort=hot"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 5, cursor and cursorx"
+	rxreq
+	expect req.url ~ "^/rest[.]php/glowthread/v1/page/5/comments[?]sort=hot&cursor=a&b&b"
+	expect req.url ~ "&b$"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0" -body "page 5, long URL, later page"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/comment/1"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "comment 1"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/01/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "leading zero"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/0/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "page 0"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/12345678901/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "eleven digits"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/1/comments/"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "trailing slash"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/%31/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60" -body "encoded digit"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/missing"
+	txresp -status 404 -body "no route"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/5/comments?sort=new&junk=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	txresp -hdr "Cache-Control: private, must-revalidate, max-age=0, s-maxage=0" -body "long URL"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/8/comments?sort=hot"
+	txresp -status 404 -hdr "Cache-Control: private, must-revalidate, max-age=0, s-maxage=0" -body "no page 8"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/8/comments?sort=hot"
+	txresp -status 404 -hdr "Cache-Control: private, must-revalidate, max-age=0, s-maxage=0" -body "no page 8"
+
+	# BAN
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/1/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 1 hot"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/10/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 10"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/1/comments?sort=new"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 1 new, fresh"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/1/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 1 hot, fresh"
+
+	# PURGE
+	rxreq
+	expect req.url == "/wiki/Page"
+	expect req.http.x-subdomain == <undef>
+	txresp -hdr "Cache-Control: s-maxage=18000, must-revalidate, max-age=0" -body "desktop, fresh"
+	rxreq
+	expect req.url == "/wiki/Page"
+	expect req.http.x-subdomain == "m"
+	txresp -hdr "Cache-Control: s-maxage=18000, must-revalidate, max-age=0" -body "mobile, fresh"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/10/comments?sort=hot"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 10, fresh"
+	rxreq
+	expect req.url == "/rest.php/glowthread/v1/page/6/comments?sort=new"
+	txresp -hdr "Cache-Control: public, s-maxage=60, max-age=0" -body "page 6 new, fresh"
+
+	# Grace is off
+	rxreq
+	expect req.url == "/wiki/Short"
+	txresp -hdr "Cache-Control: s-maxage=1, must-revalidate, max-age=0" -body "short"
+	rxreq
+	expect req.url == "/wiki/Short"
+	txresp -hdr "Cache-Control: s-maxage=1, must-revalidate, max-age=0" -body "short, fresh"
+
+	# Host case
+	rxreq
+	expect req.url == "/wiki/Page"
+	expect req.http.host == "localhost:8150"
+	txresp -hdr "Cache-Control: s-maxage=18000, must-revalidate, max-age=0" -body "desktop, after a purge in capitals"
+} -start
+
+# Two listeners: plain HTTP, and PROXY protocol, through which a client poses as another
+# address. c1 poses as the mediawiki container on a Docker network, which may purge. c2 and c4
+# pose as addresses outside the purge ACL, and c3 connects from 127.0.0.1.
+varnish v1 -arg "-a http=127.0.0.1:0" -arg "-a proxy=127.0.0.1:0,PROXY" -vcl {
+@VCL@
+} -start
+
+client c1 -connect ${v1_proxy_sock} -proxy1 "172.22.0.4:1234 127.0.0.1:80" {
+	# Anonymous page views are cached, logged-in ones, Authorization, APIs and POST pass.
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "desktop"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "desktop"
+	expect resp.http.X-Cache == "HIT"
+	# Analytics cookies and the anonymous mwuser-sessionId cookie are dropped, so the reader
+	# shares the cached page (MediaWiki sends Vary: Cookie).
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "Cookie: _ga=GA1.1.1; glowthread_gt_mwuser-sessionId=probe"
+	rxresp
+	expect resp.body == "desktop"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "Cookie: glowthread_gt__session=probe"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "Cookie: glowthread_gt_Token=probe"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "Authorization: Bearer probe"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/api.php?action=query&meta=siteinfo" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/v1/page/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -req POST -url "/wiki/Page" -hdr "Host: localhost:8150" -body "x"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+
+	# Phones and tablets get their own cached copy.
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) Mobile/15E148"
+	rxresp
+	expect resp.body == "mobile"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "User-Agent: Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) Mobile/15E148"
+	rxresp
+	expect resp.body == "mobile"
+	expect resp.http.X-Cache == "HIT"
+
+	# [GlowThread] Anonymous reads of the list are cached once per URL, without cookies or mobile flag.
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150" -hdr "Cookie: _ga=probe; glowthread_gt_mwuser-sessionId=probe"
+	rxresp
+	expect resp.body == "page 1 new"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 1 new"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150" -hdr "User-Agent: Mozilla/5.0 (Linux; Android 15) Mobile"
+	rxresp
+	expect resp.body == "page 1 new"
+	expect resp.http.X-Cache == "HIT"
+	txreq -req HEAD -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp -no_obj
+	expect resp.http.X-Cache == "HIT"
+	# Logged-in readers and Authorization pass.
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150" -hdr "Cookie: glowthread_gt__session=probe"
+	rxresp
+	expect resp.body == "page 1 new, logged in"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150" -hdr "Cookie: _ga=probe; glowthread_gt_Token=probe"
+	rxresp
+	expect resp.body == "page 1 new, token"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150" -hdr "Authorization: Bearer probe"
+	rxresp
+	expect resp.body == "page 1 new, oauth"
+	expect resp.http.X-Cache-Detail == "PASS"
+	# Only responses with s-maxage are stored: not private, not without Cache-Control
+	# (a 404), not with Set-Cookie, not with max-age alone. The list URLs without sort are
+	# looked up as ?sort=hot.
+	txreq -url "/rest.php/glowthread/v1/page/2/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/2/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/999/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 404
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/999/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 404
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/3/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/3/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/4/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/4/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "MISS"
+	# Dot segments, plain or encoded, are passed: Apache would serve another script.
+	txreq -url "/rest.php/glowthread/v1/../../api.php?action=query" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/%2e%2e/%2e%2e/api.php?action=query" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+
+	# [GlowThread] One cached object per page and sort order, at the canonical URL. Junk
+	# parameters, limit, parameter order and a missing, empty, invalid or encoded sort all
+	# use the ?sort=hot object. Every response reaches the client marked private, because
+	# purges reach no cache in front of Varnish: neither such a URL nor the canonical one.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "MISS"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&junk=1" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?limit=5&sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?r=1&sort=hot&r=2&limit=50" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=bogus" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=NEW" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=%6eew" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?%73ort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?xsort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	# When sort appears more than once, the last one wins, as in PHP.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new&sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	# Only a parameter named exactly cursor passes. An encoded one is dropped like junk.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?%63ursor=abc" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	# sort=new is a separate object, and MediaWiki receives only the canonical URL.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&junk=1&sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?limit=50&sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	# A URL of up to 2000 characters is canonicalized too.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new&junk=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	# A junk request can fill the cache too: MediaWiki still receives the canonical URL.
+	txreq -url "/rest.php/glowthread/v1/page/6/comments?r=123&sort=new&limit=50" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 6 new"
+	expect resp.http.X-Cache == "MISS"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	txreq -url "/rest.php/glowthread/v1/page/6/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 6 new"
+	expect resp.http.X-Cache == "HIT"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	# MediaWiki sends Vary: x-restbase-compat on REST responses. The header is dropped, so a
+	# new value per request hits the one cached object instead of storing another copy.
+	txreq -url "/rest.php/glowthread/v1/page/9/comments?sort=hot" -hdr "Host: localhost:8150" -hdr "x-restbase-compat: r1"
+	rxresp
+	expect resp.body == "page 9"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/9/comments?sort=hot" -hdr "Host: localhost:8150" -hdr "x-restbase-compat: r2"
+	rxresp
+	expect resp.body == "page 9"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/9/comments?sort=hot" -hdr "Host: localhost:8150" -hdr "x-restbase-compat: true"
+	rxresp
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/9/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache == "HIT"
+	# The canonical Host (GLOWTHREAD_CANONICAL_HOST, localhost:8150 in test.sh) is matched
+	# without case and lowercased.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot" -hdr "Host: LocalHost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	expect resp.http.Cache-Control == "private, must-revalidate, max-age=0, s-maxage=0"
+	# Any other Host is passed with the URL as sent: purges would never reach its copy.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot" -hdr "Host: LOCALHOST:8250"
+	rxresp
+	expect resp.body == "other port"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&junk=1" -hdr "Host: 127.0.0.1:8150"
+	rxresp
+	expect resp.body == "other host"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot" -hdr "Host: localhost:9999"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot" -hdr "Host: localhost"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	# Logged-in readers and Authorization pass with the URL as sent.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&limit=5" -hdr "Host: localhost:8150" -hdr "Cookie: glowthread_gt__session=probe"
+	rxresp
+	expect resp.body == "page 5, logged in"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&limit=5" -hdr "Host: localhost:8150" -hdr "Authorization: Bearer probe"
+	rxresp
+	expect resp.body == "page 5, oauth"
+	expect resp.http.X-Cache-Detail == "PASS"
+	# A cursor (a later page) passes with the URL as sent. When cursor appears more than once,
+	# the last one counts, as in PHP.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&cursor=abc" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5, later page"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?cursor=&cursor=abc&sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5, last cursor"
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?cursor=abc&cursorx=&sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5, cursor and cursorx"
+	expect resp.http.X-Cache-Detail == "PASS"
+	# A long URL is decided without a 503 (no repeated group exhausts the JIT stack).
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&cursor=a&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b&b" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5, long URL, later page"
+	expect resp.http.X-Cache-Detail == "PASS"
+	# An empty or bare cursor, or one followed by an empty one, means the first page to
+	# MediaWiki, so it is looked up like the first page, at any limit.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=hot&cursor=&limit=50" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 hot"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?cursor=&sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new&cursor" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new&cursor=abc&cursor=" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?cursor=abc&cursor&sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new&cursor=a&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&cursor" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	# "cursor" inside another parameter's value is no cursor.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?a=?cursor=abc&sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 5 new"
+	expect resp.http.X-Cache == "HIT"
+	# Other routes and other spellings of the list path pass with the URL as sent.
+	txreq -url "/rest.php/glowthread/v1/comment/1" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/01/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/0/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/12345678901/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/1/comments/" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/page/%31/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache-Detail == "PASS"
+	txreq -url "/rest.php/glowthread/v1/missing" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 404
+	expect resp.http.X-Cache-Detail == "PASS"
+	# A URL over 2000 characters is passed instead of failing the sort regex with a 503.
+	txreq -url "/rest.php/glowthread/v1/page/5/comments?sort=new&junk=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 200
+	expect resp.body == "long URL"
+	expect resp.http.X-Cache-Detail == "PASS"
+	# A list response without s-maxage, even MediaWiki's private max-age=0, leaves a
+	# hit-for-miss object (counted in MAIN.cache_hitmiss at the end), so concurrent
+	# requests for the URL do not wait for each other.
+	txreq -url "/rest.php/glowthread/v1/page/8/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 404
+	expect resp.http.X-Cache-Detail == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/8/comments?junk=1" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 404
+	expect resp.http.X-Cache-Detail == "MISS"
+
+	# [GlowThread] BAN <path> clears every URL under that path, and only those.
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/10/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.X-Cache == "MISS"
+	txreq -req BAN -url "/rest.php/glowthread/v1/page/1" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 1 new, fresh"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/1/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 1 hot, fresh"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/10/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 10"
+	expect resp.http.X-Cache == "HIT"
+	# BAN is refused outside the route, with a query string and with dot segments.
+	txreq -req BAN -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+	txreq -req BAN -url "/rest.php/glowthread/v1/page/1?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+	txreq -req BAN -url "/rest.php/glowthread/v1/../../wiki" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+
+	# PURGE bans the exact Host + URL, desktop and mobile copies together.
+	txreq -req PURGE -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "desktop, fresh"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) Mobile/15E148"
+	rxresp
+	expect resp.body == "mobile, fresh"
+	expect resp.http.X-Cache == "MISS"
+	# PURGE also works for one URL of the GlowThread route, but only for the canonical URL,
+	# the only one stored. A PURGE of another spelling clears nothing.
+	txreq -req PURGE -url "/rest.php/glowthread/v1/page/10/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/rest.php/glowthread/v1/page/10/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 10"
+	expect resp.http.X-Cache == "HIT"
+	txreq -req PURGE -url "/rest.php/glowthread/v1/page/10/comments?sort=hot" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/rest.php/glowthread/v1/page/10/comments" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 10, fresh"
+	expect resp.http.X-Cache == "MISS"
+	# A PURGE of the canonical URL clears the object that a junk request filled (page 6).
+	txreq -req PURGE -url "/rest.php/glowthread/v1/page/6/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/rest.php/glowthread/v1/page/6/comments?sort=new&junk=2" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 6 new, fresh"
+	expect resp.http.X-Cache == "MISS"
+	txreq -url "/rest.php/glowthread/v1/page/6/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "page 6 new, fresh"
+	expect resp.http.X-Cache == "HIT"
+	# The ban headers stay inside Varnish.
+	txreq -url "/rest.php/glowthread/v1/page/6/comments?sort=new" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.http.x-ban-host == <undef>
+	expect resp.http.x-ban-url == <undef>
+	# Clients cannot pick the mobile copy or fake X-Cache-Detail.
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "X-Subdomain: m"
+	rxresp
+	expect resp.body == "desktop, fresh"
+	expect resp.http.X-Cache == "HIT"
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "X-Dev-Pass: 1"
+	rxresp
+	expect resp.http.X-Cache-Detail == "HIT"
+	# Clients cannot mark a response private with the rewrite header either.
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150" -hdr "X-Glowthread-Url: /probe"
+	rxresp
+	expect resp.http.X-Cache == "HIT"
+	expect resp.http.Cache-Control == "s-maxage=18000, must-revalidate, max-age=0"
+	# The ban expression guard: no spaces, operators, quotes or backslashes get into a ban.
+	txreq -req PURGE -url "/wiki/Page" -hdr "Host: bad host"
+	rxresp
+	expect resp.status == 400
+	txreq -req PURGE -url "/wiki/Page" -hdr "Host: localhost&&req.url~."
+	rxresp
+	expect resp.status == 400
+	txreq -req PURGE -url "/wiki/a\"b" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 400
+	txreq -req PURGE -url "/wiki/a\\b" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 400
+
+	# An expired object goes to the backend instead of being served stale.
+	txreq -url "/wiki/Short" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "short"
+	delay 2
+	txreq -url "/wiki/Short" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "short, fresh"
+	expect resp.http.X-Cache-Detail == "PASS"
+
+	# Host names ignore case: a PURGE with the Host in capitals clears the object.
+	txreq -req PURGE -url "/wiki/Page" -hdr "Host: LocalHost:8150"
+	rxresp
+	expect resp.status == 200
+	txreq -url "/wiki/Page" -hdr "Host: LOCALHOST:8150"
+	rxresp
+	expect resp.body == "desktop, after a purge in capitals"
+	expect resp.http.X-Cache == "MISS"
+} -run
+
+# PURGE and BAN from an address outside the purge ACL are refused (c2 connects through the
+# PROXY listener as 203.0.113.9), and the cached page stays.
+client c2 -connect ${v1_proxy_sock} -proxy1 "203.0.113.9:1234 127.0.0.1:80" {
+	txreq -req PURGE -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+	txreq -req BAN -url "/rest.php/glowthread/v1/page/1" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+	txreq -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.body == "desktop, after a purge in capitals"
+	expect resp.http.X-Cache == "HIT"
+} -run
+
+# Neither localhost nor a private range outside Docker's default networks may purge: a TLS
+# proxy or load balancer in front of Varnish would connect from such an address for every reader.
+client c3 {
+	txreq -req PURGE -url "/wiki/Page" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+} -run
+client c4 -connect ${v1_proxy_sock} -proxy1 "10.0.0.5:1234 127.0.0.1:80" {
+	txreq -req BAN -url "/rest.php/glowthread/v1/page/1" -hdr "Host: localhost:8150"
+	rxresp
+	expect resp.status == 405
+} -run
+
+server s1 -wait
+
+# Hit-for-miss hits: the second request of each list response that is not stored (page 2
+# private, page 999 without Cache-Control, page 3 Set-Cookie, page 4 max-age only and
+# page 8 private with max-age=0).
+varnish v1 -expect MAIN.cache_hitmiss == 5

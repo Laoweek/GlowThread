@@ -1,0 +1,3 @@
+Long-time member of this cookbook. I mostly test recipes twice before I add them, and I fix units.
+
+If a recipe of mine does not work for you, leave a comment here.

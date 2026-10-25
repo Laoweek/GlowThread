@@ -1,0 +1,45 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+  # A client update changes the bundle: run pnpm build in client/ on the branch and commit
+  # resources/dist, or CI fails. tests/e2e/old-chromium is left out on purpose: puppeteer-core
+  # stays at 8.0.0 to match the DevTools protocol of Chromium 90.
+  - package-ecosystem: npm
+    directories: [/client, /tests/e2e]
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      dependencies:
+        patterns: ['*']
+    ignore:
+      # TypeScript 7 breaks the Vue SFC compiler (client/README.md).
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+  # composer.json: dev tools for local `composer test`, no composer.lock. CI does not use them:
+  # scripts/php-test.sh runs phpcs from MediaWiki core's own dev dependencies.
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+  # dev/compose.yaml: the Varnish image is pinned by digest. The MediaWiki image tracks 1.43 on
+  # purpose, and the database images come from dev/setup.sh, which Dependabot does not read, so
+  # only Varnish gets updates.
+  - package-ecosystem: docker-compose
+    directory: /dev
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: mediawiki
+      - dependency-name: mariadb
+      - dependency-name: mysql

@@ -1,0 +1,3 @@
+# Dev wiki only. Links to these hosts cannot be saved in pages, and comments that contain them
+# are held for review. One regular expression per line, matched against the link's host.
+spam\.example

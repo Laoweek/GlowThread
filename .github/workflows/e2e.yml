@@ -1,0 +1,86 @@
+name: End-to-end
+
+# Playwright (tests/e2e) against the full dev stack from dev/setup.sh: the official MediaWiki 1.43
+# image, MariaDB, Varnish and a job runner, seeded with the content in dev/seed. Too slow
+# for every push, so nightly and on demand.
+# It tests the committed build in resources/dist (CI checks that it matches the source).
+# tests/e2e/old-chromium (Chromium 90 for macOS arm64 only) does not run here.
+on:
+  schedule:
+    - cron: '41 18 * * *' # 18:41 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    name: Playwright against the dev wiki
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Fetches the pinned third-party code, installs the wiki and seeds it: pages, accounts,
+      # blocks and comments (dev/seed). The account passwords are generated into dev/.env.local,
+      # where the tests read them. Wiki on localhost:8150 (Varnish) and 8151 (Apache).
+      # dev/README.md describes the accounts and the seeded pages.
+      # Step time limits, so a hang fails the step and the log and artifact steps still run.
+      - name: Start the dev wiki
+        timeout-minutes: 20
+        run: dev/setup.sh
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          package_json_file: tests/e2e/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          # As in the client job (client/README.md: Node 24).
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: tests/e2e/pnpm-lock.yaml
+      - name: Install Playwright and its browsers
+        working-directory: tests/e2e
+        run: |
+          pnpm install --frozen-lockfile
+          # The projects in playwright.config.ts use Chromium and WebKit.
+          pnpm exec playwright install --with-deps chromium webkit
+      # A trace (screenshots, DOM, network) of each failed test goes into .results.
+      - name: Playwright
+        timeout-minutes: 30
+        working-directory: tests/e2e
+        run: pnpm exec playwright test --trace=retain-on-failure
+      # The read-only FlowThread compatibility API is off by default, so its tests skip above.
+      - name: FlowThread compatibility API
+        timeout-minutes: 10
+        run: |
+          GLOWTHREAD_DEV_LEGACY_COMPAT=1 dev/setup.sh
+          (cd tests/e2e && pnpm exec playwright test specs/compat.spec.ts --project vector-2022 --trace=retain-on-failure)
+          dev/setup.sh
+      # Seeds FlowThread with made-up comments, imports them with --dry-run, the real run and
+      # --verify (0 mismatches), then returns to GlowThread mode (dev/README.md, "Legacy mode").
+      - name: FlowThread import
+        timeout-minutes: 15
+        run: dev/import-test.sh
+      - name: Wiki logs
+        if: failure()
+        working-directory: dev
+        run: |
+          docker compose ps --all
+          docker compose logs --no-color --tail=200 mediawiki jobrunner varnish db
+          docker compose exec -T mediawiki sh -c 'tail -n 100 /var/www/data/logs/*.log' || true
+      - name: Keep the Playwright output
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-results
+          path: tests/e2e/.results
+          # .results starts with a dot, which upload-artifact skips by default.
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7

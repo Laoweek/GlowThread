@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions: {}
+
+# A new push to a pull request cancels its older run. Other runs are grouped by commit, so
+# every commit on main gets a full result.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  php:
+    name: PHP (MediaWiki ${{ matrix.mediawiki }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        # 1.43 is the LTS release (the dev stack runs it). 1.46 is the newest release.
+        mediawiki: ['1.43', '1.46']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # php -l, extension.json, PHPUnit (unit and integration on SQLite) and phpcs, in a
+      # throwaway mediawiki:<version> container. Exits 1 when any check fails.
+      - name: PHP checks
+        run: scripts/php-test.sh "$MEDIAWIKI_VERSION"
+        env:
+          MEDIAWIKI_VERSION: ${{ matrix.mediawiki }}
+
+  client:
+    name: Client bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          package_json_file: client/package.json
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          # client/README.md: Node 24. package.json declares no Node version to read.
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: client/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Type check
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test
+      # Rebuilds resources/dist from scratch, then runs pnpm check: fails on syntax above ES2017,
+      # eval, or CSS below the browser floor. Sizes over the budget are only reported.
+      - name: Build and bundle checks
+        run: pnpm build
+      - name: Committed build matches the source
+        working-directory: .
+        run: |
+          changes=$(git status --porcelain --untracked-files=all -- resources/dist)
+          if [ -n "$changes" ]; then
+            echo "::error::resources/dist differs from a fresh build. Run pnpm build in client/ and commit the result."
+            echo "$changes"
+            git diff --stat -- resources/dist
+            exit 1
+          fi
+
+  varnish:
+    name: Varnish cache policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # varnishtest against a fake backend in a throwaway container of the dev stack's Varnish image.
+      - run: dev/varnish/test.sh

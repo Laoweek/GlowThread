@@ -1,0 +1,18 @@
+{
+  "User:Alice": [
+    {
+      "by": "Bob",
+      "ago": "12d",
+      "text": "Your focaccia notes saved my dinner party. Does Gerald ever get a day off?",
+      "likes": ["Carol"],
+      "replies": [
+        { "by": "Alice", "ago": "11d", "text": "Never. He lives in the fridge between bakes, which is basically a holiday." }
+      ]
+    },
+    {
+      "by": "Trent",
+      "ago": "2d",
+      "text": "@Alice I moved the starter hydration table into its own section, have a look when you have time."
+    }
+  ]
+}

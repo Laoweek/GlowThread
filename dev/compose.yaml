@@ -1,0 +1,130 @@
+# Local MediaWiki 1.43 stack for developing GlowThread:
+#   Varnish -> Apache/PHP (official mediawiki image) -> MariaDB 10.11, plus a job runner.
+# Start it with ./setup.sh (see README.md). Ports listen on 127.0.0.1 only.
+name: glowthread
+
+# The web server and the job runner share the code, the settings and the data volume.
+x-mediawiki: &mediawiki
+  # A moving tag on purpose, so the dev wiki gets MediaWiki 1.43 security releases. To pin an
+  # exact build, set GLOWTHREAD_DEV_MW_IMAGE to mediawiki:<version>@sha256:<digest>.
+  image: ${GLOWTHREAD_DEV_MW_IMAGE:-mediawiki:1.43}
+  restart: unless-stopped
+  environment:
+    # config/LocalSettings.php loads the installer output from the data volume, then the dev settings.
+    MW_CONFIG_FILE: /dev-config/LocalSettings.php
+    GLOWTHREAD_DEV_SERVER: "http://localhost:${GLOWTHREAD_DEV_PORT:-8150}"
+    # 1 loads FlowThread instead of GlowThread (README.md, "Legacy mode").
+    GLOWTHREAD_DEV_LEGACY: "${GLOWTHREAD_DEV_LEGACY:-0}"
+    # 1 turns on $wgGlowThreadLegacyCompat (import-test.sh does).
+    GLOWTHREAD_DEV_LEGACY_COMPAT: "${GLOWTHREAD_DEV_LEGACY_COMPAT:-0}"
+  volumes:
+    # The extension under test: the project root (or GLOWTHREAD_SRC), live and read-only.
+    - type: bind
+      source: ${GLOWTHREAD_SRC:-..}
+      target: /var/www/html/extensions/GlowThread
+      read_only: true
+      bind:
+        create_host_path: false
+    # An empty, read-only folder over dev/ in that mount: PHP cannot read dev/.env.local (the dev
+    # passwords). The containers get dev/ files only through the mounts below. Every checkout has
+    # dev/, so the mount point always exists. A folder that only some checkouts have (local
+    # working folders) cannot be hidden this way here, because Docker cannot create a missing
+    # mount point inside the read-only mount: hide those in a local compose.override.yaml.
+    - type: tmpfs
+      target: /var/www/html/extensions/GlowThread/dev
+      read_only: true
+    - ./config:/dev-config:ro
+    # Keeps project files (dev/, private/, docs, tests, hidden files) off the web.
+    - ./config/apache-access.conf:/etc/apache2/conf-enabled/zz-glowthread-access.conf:ro
+    # PHP: revalidate files on every request, log errors instead of printing them.
+    - ./config/php.ini:/usr/local/etc/php/conf.d/zz-glowthread-dev.ini:ro
+    - ./maintenance:/dev-maintenance:ro
+    - ./seed:/dev-seed:ro
+    # Third-party code fetched by fetch.sh. Echo, Thanks, SpamBlacklist, Vector and
+    # MinervaNeue come with the image.
+    - ./extensions/CheckUser:/var/www/html/extensions/CheckUser:ro
+    - ./extensions/MobileFrontend:/var/www/html/extensions/MobileFrontend:ro
+    - ./extensions/FlowThread:/var/www/html/extensions/FlowThread:ro
+    - ./skins/Citizen:/var/www/html/skins/Citizen:ro
+    # Installer output (LocalSettings.php with the secret key) and logs.
+    - data:/var/www/data
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  # Apache with mod_php. Port 8151 bypasses Varnish.
+  mediawiki:
+    <<: *mediawiki
+    container_name: glowthread-mediawiki
+    ports:
+      - "127.0.0.1:${GLOWTHREAD_DEV_DIRECT_PORT:-8151}:80"
+
+  # Runs queued jobs as soon as they are queued. $wgJobRunRate is 0, so web requests run none.
+  jobrunner:
+    <<: *mediawiki
+    container_name: glowthread-jobrunner
+    user: www-data
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while :; do
+          php maintenance/run.php runJobs --wait --maxtime=3600 --memory-limit=256M || sleep 10
+        done
+
+  # The canonical wiki URL ($wgServer) is this port. See varnish/default.vcl.
+  varnish:
+    # Pinned by digest. Dependabot (.github/dependabot.yml) proposes updates.
+    image: varnish:9.0.3@sha256:90c6c9c38cc9f4502cff80972e6fcd17029f7fbc594aa7e958ddfc8ecbdaa740
+    container_name: glowthread-varnish
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${GLOWTHREAD_DEV_PORT:-8150}:80"
+    environment:
+      VARNISH_SIZE: 64M
+      # The Host of $wgServer. Only this Host gets cached comment lists (default.vcl).
+      GLOWTHREAD_CANONICAL_HOST: "localhost:${GLOWTHREAD_DEV_PORT:-8150}"
+    volumes:
+      - ./varnish/default.vcl:/etc/varnish/default.vcl:ro
+    depends_on:
+      mediawiki:
+        condition: service_started
+        # The backend address is resolved when the VCL compiles, so restart Varnish
+        # whenever Compose recreates the mediawiki container.
+        restart: true
+
+  # MariaDB 10.11 LTS by default. GLOWTHREAD_DEV_DB=mysql runs MySQL 8.0 instead, with its own
+  # volumes (README.md, "MySQL"). Not published to the host: use `docker compose exec db ...`.
+  db:
+    image: ${GLOWTHREAD_DEV_DB_IMAGE:-mariadb:10.11.18}
+    container_name: glowthread-db
+    restart: unless-stopped
+    # Small buffers for a laptop. Both servers accept these options.
+    command:
+      - --innodb-buffer-pool-size=128M
+      - --max-connections=60
+      - --skip-name-resolve
+      - --skip-log-bin
+      - --performance-schema=OFF
+    environment:
+      MYSQL_DATABASE: glowthread
+      MYSQL_USER: wikiuser
+      # Generated by setup.sh into dev/.env.local. Only read when the volume is first initialised.
+      MYSQL_PASSWORD: "${GLOWTHREAD_DEV_DB_PASSWORD:-}"
+      MYSQL_ROOT_PASSWORD: "${GLOWTHREAD_DEV_DB_ROOT_PASSWORD:-}"
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      # mariadb-admin in MariaDB, mysqladmin in MySQL. Both answer "alive" without credentials.
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 --silent 2>/dev/null || mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 3s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+# One pair of volumes per database engine, so trying MySQL keeps the MariaDB wiki.
+volumes:
+  data:
+    name: glowthread_data_${GLOWTHREAD_DEV_DB:-mariadb}
+  db:
+    name: glowthread_db_${GLOWTHREAD_DEV_DB:-mariadb}

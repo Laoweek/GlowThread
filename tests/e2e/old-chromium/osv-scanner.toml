@@ -1,0 +1,16 @@
+# OSV-Scanner exceptions for the old-Chromium test harness (pnpm-lock.yaml in this folder).
+# puppeteer-core 8.0.0 is pinned because its DevTools protocol matches Chromium 90. It depends
+# on extract-zip 2.0.1, which has no fixed release. extract-zip is only used by puppeteer's
+# BrowserFetcher (download and install), which this harness never calls: setup.mjs downloads
+# Chromium with fetch, checks a pinned SHA-256 and unpacks it with /usr/bin/ditto, and run.mjs
+# only launches that local binary. Test tooling, never shipped. Review when the dates pass.
+
+[[IgnoredVulns]]
+id = "GHSA-7pqw-9j4j-h8q3"
+ignoreUntil = 2027-04-09
+reason = "extract-zip 2.0.1 via puppeteer-core 8.0.0 BrowserFetcher, never called here (setup.mjs unpacks with ditto); no fixed version exists. Dev-only test tooling."
+
+[[IgnoredVulns]]
+id = "GHSA-jmr9-qjv8-65gv"
+ignoreUntil = 2027-04-09
+reason = "extract-zip 2.0.1 via puppeteer-core 8.0.0 BrowserFetcher, never called here (setup.mjs unpacks with ditto); no fixed version exists. Dev-only test tooling."

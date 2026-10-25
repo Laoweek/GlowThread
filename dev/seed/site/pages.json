@@ -1,0 +1,6 @@
+[
+  { "title": "MediaWiki:Spam-blacklist", "file": "MediaWiki-Spam-blacklist.txt" },
+  { "title": "User:Alice", "file": "User-Alice.wiki", "by": "Alice" },
+  { "title": "User:Trent", "file": "User-Trent.wiki", "by": "Trent" },
+  { "title": "Sandbox/Load test", "file": "Sandbox-Load_test.wiki" }
+]
