@@ -13,24 +13,24 @@
   },
   "dependencies": {
     "@floating-ui/vue": "2.0.1",
-    "@lucide/vue": "1.49.0",
+    "@lucide/vue": "1.59.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "reka-ui": "2.11.0",
-    "vue": "3.5.43"
+    "vue": "3.5.44"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",
-    "@vitejs/plugin-vue": "6.0.9",
-    "acorn": "8.18.0",
+    "@vitejs/plugin-vue": "6.0.10",
+    "acorn": "8.19.0",
     "cssjanus": "2.3.1",
-    "happy-dom": "20.14.5",
+    "happy-dom": "21.0.3",
     "lightningcss": "1.33.0",
-    "postcss": "8.5.28",
+    "postcss": "8.5.30",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
-    "vite": "8.3.3",
-    "vitest": "5.0.3",
-    "vue-tsc": "3.3.11"
+    "vite": "8.3.4",
+    "vitest": "5.0.5",
+    "vue-tsc": "3.3.13"
   }
 }
