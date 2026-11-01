@@ -55,8 +55,8 @@ function run(kind: Kind) {
       </Button>
     </template>
     <!-- An icon on phones, so the bar stays one line. -->
-    <Button size="sm" variant="ghost" :aria-label="t('admin-bulk-clear')" @click="q.state.selected = []">
-      <X class="gt:size-icon-sm" aria-hidden="true" /><span class="gt:hidden gt:sm:inline">{{ t('admin-bulk-clear') }}</span><kbd class="gt-kbd gt-kbd-hint" aria-hidden="true">Esc</kbd>
+    <Button size="sm" variant="ghost" :aria-label="t('admin-bulk-clear') + ' Esc'" @click="q.state.selected = []">
+      <X class="gt:size-icon-sm" aria-hidden="true" /><span class="gt:hidden gt:sm:inline">{{ t('admin-bulk-clear') }}</span> <kbd class="gt-kbd gt-kbd-hint" aria-hidden="true">Esc</kbd>
     </Button>
   </div>
 </template>

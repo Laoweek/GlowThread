@@ -26,7 +26,7 @@
 	"glowthread-ui-mention-units": "提及：$1",
 	"glowthread-ui-posted": "評論已發布",
 	"glowthread-ui-posted-held": "評論已送出，審核通過後其他人才能看到",
-	"glowthread-ui-like-label": "讚（$1）",
+	"glowthread-ui-like-label": "讚：$1",
 	"glowthread-ui-like-count": "$1 個讚",
 	"glowthread-ui-like-login": "登入後即可按讚",
 	"glowthread-ui-like-new-account": "帳號註冊一段時間後，或有評論審核通過後，即可按讚。",

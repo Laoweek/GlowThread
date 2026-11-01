@@ -32,7 +32,7 @@ watch(liked, (v) => {
     class="ext-glowthread-like gt-hit gt:-ml-1.5 gt:inline-flex gt:h-7 gt:items-center gt:gap-1 gt:rounded-control gt:px-1.5 gt:text-meta gt:transition-colors gt:hover:bg-surface-subtle"
     :class="liked ? 'gt:text-accent-text' : 'gt:text-fg-muted gt:hover:text-fg'"
     :aria-pressed="liked ? 'true' : 'false'"
-    :aria-label="t('like-label', comment.likes)"
+    :aria-label="t('like-label', num(comment.likes))"
     @click="like(store, comment)"
   >
     <svg

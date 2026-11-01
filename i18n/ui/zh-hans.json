@@ -26,7 +26,7 @@
 	"glowthread-ui-mention-units": "提及：$1",
 	"glowthread-ui-posted": "评论已发布",
 	"glowthread-ui-posted-held": "评论已提交，审核通过后其他人才能看到",
-	"glowthread-ui-like-label": "赞（$1）",
+	"glowthread-ui-like-label": "赞：$1",
 	"glowthread-ui-like-count": "$1 个赞",
 	"glowthread-ui-like-login": "登录后即可点赞",
 	"glowthread-ui-like-new-account": "账号注册一段时间后，或有评论审核通过后，即可点赞。",

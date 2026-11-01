@@ -26,7 +26,7 @@
 	"glowthread-ui-mention-units": "Mentions: $1",
 	"glowthread-ui-posted": "Comment posted",
 	"glowthread-ui-posted-held": "Comment sent. Others will see it once a moderator approves it",
-	"glowthread-ui-like-label": "Like ($1)",
+	"glowthread-ui-like-label": "Like: $1",
 	"glowthread-ui-like-count": "{{PLURAL:$1|$1 like|$1 likes}}",
 	"glowthread-ui-like-login": "Log in to like comments",
 	"glowthread-ui-like-new-account": "You can like comments once your account is a little older or one of your comments is approved.",
