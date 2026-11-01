@@ -31,7 +31,7 @@ jobs:
       # machines. To accept one, add it to an osv-scanner.toml next to the lockfile, with a reason
       # and an ignoreUntil date. A lockfile that is missing fails the scan. composer.json has no
       # composer.lock to scan (its packages are dev tools only).
-      - uses: google/osv-scanner-action/osv-scanner-action@a345acffa64b0eaede81a3d9aae6141214d9c8fc # v2.6.0
+      - uses: google/osv-scanner-action/osv-scanner-action@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
         with:
           scan-args: |-
             scan
