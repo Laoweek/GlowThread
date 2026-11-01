@@ -98,7 +98,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ------------------------------------------------------------------------
-@lucide/vue 1.49.0 (ISC)
+@lucide/vue 1.59.0 (ISC)
 
 ISC License
 
@@ -145,7 +145,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ------------------------------------------------------------------------
-@vue/reactivity 3.5.43 (MIT)
+@vue/reactivity 3.5.44 (MIT)
 
 The MIT License (MIT)
 
@@ -170,7 +170,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ------------------------------------------------------------------------
-@vue/runtime-core 3.5.43 (MIT)
+@vue/runtime-core 3.5.44 (MIT)
 
 The MIT License (MIT)
 
@@ -195,7 +195,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ------------------------------------------------------------------------
-@vue/runtime-dom 3.5.43 (MIT)
+@vue/runtime-dom 3.5.44 (MIT)
 
 The MIT License (MIT)
 
@@ -220,7 +220,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ------------------------------------------------------------------------
-@vue/shared 3.5.43 (MIT)
+@vue/shared 3.5.44 (MIT)
 
 The MIT License (MIT)
 
